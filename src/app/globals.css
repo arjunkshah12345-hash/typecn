@@ -1,0 +1,323 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ------------------------------------------------------------------------ */
+/*  Tokens                                                                  */
+/* ------------------------------------------------------------------------ */
+
+:root {
+  --ink: #0f0e0c;
+  --ink-2: #181714;
+  --ink-3: #24221e;
+  --paper: #efe9df;
+  --bone: #d8cfbf;
+  --stone: #8f877a;
+  --accent: #ff5a1f;
+  --accent-ink: #120a06;
+
+  /* theme-dependent (dark default) */
+  --bg: var(--ink);
+  --bg-2: var(--ink-2);
+  --fg: var(--paper);
+  --muted: #9b9386;
+  --faint: #5d574e;
+  --line: rgb(239 233 223 / 0.12);
+  --line-strong: rgb(239 233 223 / 0.28);
+  --panel: #151411;
+  --code-bg: #12110f;
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #f1ece3;
+  --bg-2: #e9e2d6;
+  --fg: #12110f;
+  --muted: #645d52;
+  --faint: #a59c8e;
+  --line: rgb(18 17 15 / 0.12);
+  --line-strong: rgb(18 17 15 / 0.3);
+  --panel: #ebe5da;
+  --code-bg: #e6dfd2;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-panel: var(--panel);
+  --color-accent: var(--accent);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-paper: var(--paper);
+  --color-bone: var(--bone);
+  --color-stone: var(--stone);
+  --font-serif: var(--font-fraunces), "Times New Roman", serif;
+  --font-sans: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-wide: var(--font-anybody), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+}
+
+/* Effect fonts used by the registry (inline style values). */
+:root {
+  --font-serif: var(--font-fraunces), "Times New Roman", serif;
+  --font-grotesk: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-wide: var(--font-anybody), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ------------------------------------------------------------------------ */
+/*  Base                                                                    */
+/* ------------------------------------------------------------------------ */
+
+html {
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: auto;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-optical-sizing: auto;
+  min-height: 100dvh;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Subtle film grain — fixed, non-interactive, cheap (static SVG noise). */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -50%;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+[data-theme="light"] .grain::after {
+  opacity: 0.07;
+  mix-blend-mode: multiply;
+}
+
+/* ------------------------------------------------------------------------ */
+/*  Utilities                                                               */
+/* ------------------------------------------------------------------------ */
+
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 450;
+}
+
+@utility hairline {
+  border-color: var(--line);
+}
+
+@utility container-x {
+  padding-inline: clamp(16px, 3.2vw, 48px);
+}
+
+@utility text-balance {
+  text-wrap: balance;
+}
+
+/* Editorial link underline that draws in */
+.ulink {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+  transition: background-size 500ms var(--ease-out-expo);
+}
+.ulink:hover,
+.ulink:focus-visible {
+  background-size: 100% 1px;
+  background-position: 0% 100%;
+}
+
+/* Button with sliding fill */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  height: 48px;
+  padding: 0 1.15rem;
+  border: 1px solid var(--line-strong);
+  overflow: hidden;
+  isolation: isolate;
+  font-size: 15px;
+  transition: color 450ms var(--ease-out-expo), border-color 450ms;
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--fg);
+  transform: translateY(101%);
+  transition: transform 550ms var(--ease-out-expo);
+}
+.btn:hover::before,
+.btn:focus-visible::before {
+  transform: translateY(0);
+}
+.btn:hover,
+.btn:focus-visible {
+  color: var(--bg);
+  border-color: var(--fg);
+}
+.btn .btn-arrow {
+  transition: transform 550ms var(--ease-out-expo);
+}
+.btn:hover .btn-arrow {
+  transform: translateX(4px) rotate(-45deg);
+}
+.btn-accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+.btn-accent::before {
+  background: var(--fg);
+}
+
+/* Range input */
+input[type="range"].range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 18px;
+  background: transparent;
+  cursor: pointer;
+}
+input[type="range"].range::-webkit-slider-runnable-track {
+  height: 1px;
+  background: linear-gradient(to right, var(--fg) 0 var(--fill, 50%), var(--line-strong) var(--fill, 50%) 100%);
+}
+input[type="range"].range::-moz-range-track {
+  height: 1px;
+  background: var(--line-strong);
+}
+input[type="range"].range::-moz-range-progress {
+  height: 1px;
+  background: var(--fg);
+}
+input[type="range"].range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 11px;
+  height: 11px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--fg);
+  transition: transform 200ms var(--ease-out-expo), background 200ms;
+}
+input[type="range"].range::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--fg);
+}
+input[type="range"].range:hover::-webkit-slider-thumb,
+input[type="range"].range:focus-visible::-webkit-slider-thumb {
+  transform: scale(1.35);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+input[type="range"].range:focus-visible {
+  outline: none;
+}
+input[type="range"].range:focus-visible::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, var(--accent) 0 var(--fill, 50%), var(--line-strong) var(--fill, 50%) 100%);
+}
+
+/* Syntax highlighting (sugar-high) */
+.code {
+  --sh-class: var(--accent);
+  --sh-identifier: var(--fg);
+  --sh-sign: var(--muted);
+  --sh-property: #d8b98a;
+  --sh-entity: #e9a77c;
+  --sh-jsxliterals: #c7bfb2;
+  --sh-string: #a8c08a;
+  --sh-keyword: #ff8a5c;
+  --sh-comment: var(--faint);
+}
+[data-theme="light"] .code {
+  --sh-property: #8a5a14;
+  --sh-entity: #a2400f;
+  --sh-jsxliterals: #4f4a42;
+  --sh-string: #4d6b22;
+  --sh-keyword: #c4380a;
+}
+
+/* Pulsing status dot */
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgb(255 90 31 / 0.55); }
+  70% { box-shadow: 0 0 0 7px rgb(255 90 31 / 0); }
+  100% { box-shadow: 0 0 0 0 rgb(255 90 31 / 0); }
+}
+.dot-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: var(--accent);
+  animation: pulse-dot 1.8s infinite;
+}
+
+@keyframes scroll-cue {
+  0% { transform: scaleY(0); transform-origin: top; }
+  45% { transform: scaleY(1); transform-origin: top; }
+  55% { transform: scaleY(1); transform-origin: bottom; }
+  100% { transform: scaleY(0); transform-origin: bottom; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+  .dot-live,
+  .motion-safe-only {
+    animation: none !important;
+  }
+}
+
+/* Hide scrollbars on the horizontal filter rail */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Thin scrollbars inside panels */
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}

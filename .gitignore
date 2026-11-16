@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+packages/typecn/dist
+packages/typecn/*.tgz
+test-results
+playwright-report
+screenshots
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
