@@ -79,7 +79,7 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
 
       <Playground slug={meta.slug} mode="effect" />
 
-      <div className="container-x grid gap-16 py-20 lg:grid-cols-12">
+      <div className="container-x grid grid-cols-1 gap-16 py-20 lg:grid-cols-12">
         <aside className="lg:col-span-3">
           <nav aria-label="On this page" className="label sticky top-24 hidden flex-col gap-2 text-muted lg:flex">
             {["About", "Installation", "Usage", "API reference", "Triggers", "Accessibility", "Performance"].map((h) => (
@@ -89,7 +89,7 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
             ))}
           </nav>
         </aside>
-        <div className="space-y-16 lg:col-span-9">
+        <div className="min-w-0 space-y-16 lg:col-span-9">
           <DocSection id="about" title="About">
             <p className="max-w-[62ch] text-[17px] leading-relaxed text-muted">{meta.description}</p>
             <dl className="mt-6 grid grid-cols-2 gap-px border border-line bg-line text-[14px] sm:grid-cols-4">

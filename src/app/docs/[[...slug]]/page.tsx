@@ -27,7 +27,7 @@ export default async function DocPage({ params }: { params: Promise<{ slug?: str
   const i = docs.indexOf(d);
   const next = docs[i + 1];
   return (
-    <div className="container-x grid gap-12 pt-[110px] pb-24 lg:grid-cols-12">
+    <div className="container-x grid grid-cols-1 gap-12 pt-[110px] pb-24 lg:grid-cols-12">
       <aside className="lg:col-span-3">
         <nav aria-label="Documentation" className="sticky top-24">
           <p className="label mb-4 text-faint">Documentation</p>
@@ -53,7 +53,7 @@ export default async function DocPage({ params }: { params: Promise<{ slug?: str
           </Link>
         </nav>
       </aside>
-      <article className="lg:col-span-8">
+      <article className="min-w-0 lg:col-span-8">
         <p className="label mb-4 text-accent">Docs · {String(i + 1).padStart(2, "0")}</p>
         <h1 className="mb-6 font-serif text-[clamp(48px,7vw,104px)] leading-[0.9] tracking-[-0.045em]">{d.title}</h1>
         <p className="mb-10 max-w-[50ch] font-serif text-[22px] leading-snug italic text-muted">{d.blurb}</p>

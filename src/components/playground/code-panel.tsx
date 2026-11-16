@@ -50,7 +50,7 @@ export function CodePanel({ meta, state }: { meta: EffectMeta; state: Playground
 
   return (
     <section aria-label="Code" className="border-t border-line">
-      <div className="flex items-center justify-between gap-4 border-b border-line">
+      <div className="flex flex-wrap items-center justify-between gap-x-4 border-b border-line">
         <div className="flex" role="tablist" aria-label="Code format">
           {tabs.map((t) => (
             <button
@@ -67,7 +67,7 @@ export function CodePanel({ meta, state }: { meta: EffectMeta; state: Playground
           ))}
         </div>
         {tab === "React" ? (
-          <div className="mr-2 flex border border-line" role="radiogroup" aria-label="React view">
+          <div className="mx-2 mb-2 flex max-w-full overflow-x-auto border border-line sm:mb-0" role="radiogroup" aria-label="React view">
             {(["usage", "source", "core"] as const).map((v) => (
               <button
                 key={v}
@@ -75,7 +75,7 @@ export function CodePanel({ meta, state }: { meta: EffectMeta; state: Playground
                 role="radio"
                 aria-checked={view === v}
                 onClick={() => setView(v)}
-                className={`label h-7 px-2.5 transition-colors ${view === v ? "bg-fg text-bg" : "text-muted hover:text-fg"}`}
+                className={`label h-7 shrink-0 px-2.5 whitespace-nowrap transition-colors ${view === v ? "bg-fg text-bg" : "text-muted hover:text-fg"}`}
               >
                 {v === "usage" ? "Usage" : v === "source" ? `${meta.file}.tsx` : "core.tsx"}
               </button>
