@@ -21,7 +21,7 @@ export const fonts: Record<FontKey, { label: string; css: string; family: string
   serif: { label: "Fraunces", css: "var(--font-serif)", family: "Fraunces", note: "Variable serif · wght, opsz, SOFT, WONK" },
   grotesk: { label: "Bricolage Grotesque", css: "var(--font-grotesk)", family: "Bricolage Grotesque", note: "Variable grotesque · wght, wdth, opsz" },
   wide: { label: "Anybody", css: "var(--font-wide)", family: "Anybody", note: "Variable display · wght 100–900, wdth 50–150" },
-  mono: { label: "JetBrains Mono", css: "var(--font-mono)", family: "JetBrains Mono", note: "Variable monospace · wght" },
+  mono: { label: "JetBrains Mono", css: "var(--font-code)", family: "JetBrains Mono", note: "Variable monospace · wght" },
 };
 
 interface ControlBase {

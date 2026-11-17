@@ -2,35 +2,33 @@
 
 import { useState } from "react";
 
-/**
- * The typecn wordmark. Letters sit at a light weight; on hover a weight wave
- * travels through them (variable font), and the cursor-like "n" blinks once.
- */
-export function Wordmark({ className = "" }: { className?: string }) {
-  const [hover, setHover] = useState(0);
-  const letters = "typecn".split("");
+/** 4×4 Bayer-ish pixel mark that reshuffles on hover, plus the name in Geist. */
+const frames = ["1010010110100101", "1101101001011011", "0110100110010110"];
+
+export function LogoMark({ className = "" }: { className?: string }) {
+  const [f, setF] = useState(0);
   return (
     <span
-      className={`inline-flex items-baseline font-serif leading-none tracking-[-0.03em] ${className}`}
-      onPointerEnter={() => setHover((h) => h + 1)}
-      onFocus={() => setHover((h) => h + 1)}
-      aria-label="typecn"
+      aria-hidden
+      className={`grid size-[1em] shrink-0 grid-cols-4 gap-[1px] ${className}`}
+      onPointerEnter={() => setF((v) => (v + 1) % frames.length)}
     >
-      {letters.map((l, i) => (
+      {frames[f].split("").map((b, i) => (
         <span
-          key={`${hover}-${i}`}
-          aria-hidden
-          className="inline-block motion-safe-only"
-          style={{
-            fontVariationSettings: '"wght" 420, "SOFT" 100, "WONK" 1',
-            animation: hover ? `wm-wave 900ms cubic-bezier(0.37,0,0.63,1) ${i * 55}ms both` : undefined,
-          }}
-        >
-          {l}
-        </span>
+          key={i}
+          className="rounded-[1px] transition-[background-color,opacity] duration-300"
+          style={{ background: b === "1" ? "var(--accent)" : "var(--fg)", opacity: b === "1" ? 1 : 0.14, transitionDelay: `${(i % 4) * 25}ms` }}
+        />
       ))}
-      <span aria-hidden className="ml-[0.06em] inline-block h-[0.12em] w-[0.12em] translate-y-[-0.02em] rounded-full bg-accent" />
-      <style>{`@keyframes wm-wave{0%{font-variation-settings:"wght" 420,"SOFT" 100,"WONK" 1;transform:translateY(0)}40%{font-variation-settings:"wght" 900,"SOFT" 0,"WONK" 1;transform:translateY(-0.08em)}100%{font-variation-settings:"wght" 420,"SOFT" 100,"WONK" 1;transform:translateY(0)}}`}</style>
+    </span>
+  );
+}
+
+export function Wordmark({ className = "" }: { className?: string }) {
+  return (
+    <span className={`inline-flex items-center gap-2 font-sans font-semibold leading-none tracking-[-0.04em] ${className}`} aria-label="typecn">
+      <LogoMark className="text-[0.92em]" />
+      <span aria-hidden>typecn</span>
     </span>
   );
 }

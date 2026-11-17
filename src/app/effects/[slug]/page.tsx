@@ -53,26 +53,26 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
   };
 
   return (
-    <article className="pt-[60px]">
+    <article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <header className="container-x grid gap-6 border-b border-line py-8 md:grid-cols-12 md:items-end md:py-12">
+      <header className="container-x grid gap-6 pt-[104px] pb-8 md:grid-cols-12 md:items-end md:pb-10">
         <div className="md:col-span-8">
           <nav aria-label="Breadcrumb" className="label mb-5 flex flex-wrap gap-2 text-muted">
             <Link href="/effects" className="ulink hover:text-fg">
-              Explore
+              Effects
             </Link>
             <span aria-hidden>/</span>
             <Link href={`/effects?category=${cat.id}`} className="ulink hover:text-fg">
               {cat.letter} · {cat.name}
             </Link>
           </nav>
-          <h1 className="flex items-baseline gap-4 font-serif text-[clamp(48px,7.5vw,120px)] leading-[0.88] tracking-[-0.045em]">
+          <h1 className="display flex items-baseline gap-4 text-[clamp(44px,6.5vw,96px)]">
             <span className="font-mono text-[13px] tracking-normal text-accent">{String(meta.number).padStart(2, "0")}</span>
             {meta.name}
           </h1>
         </div>
         <div className="md:col-span-4">
-          <p className="font-serif text-[22px] leading-tight italic">{meta.tagline}</p>
+          <p className="text-[20px] leading-snug tracking-[-0.01em]">{meta.tagline}</p>
           <p className="mt-3 text-[15px] leading-relaxed text-muted">{meta.description}</p>
         </div>
       </header>
@@ -92,7 +92,7 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
         <div className="min-w-0 space-y-16 lg:col-span-9">
           <DocSection id="about" title="About">
             <p className="max-w-[62ch] text-[17px] leading-relaxed text-muted">{meta.description}</p>
-            <dl className="mt-6 grid grid-cols-2 gap-px border border-line bg-line text-[14px] sm:grid-cols-4">
+            <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line text-[14px] sm:grid-cols-4">
               {[
                 ["Component", meta.component],
                 ["Category", cat.name],
@@ -152,16 +152,16 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
         </div>
       </div>
 
-      <nav aria-label="More effects" className="grid border-t border-line md:grid-cols-2">
+      <nav aria-label="More effects" className="container-x grid gap-3 pb-10 md:grid-cols-2">
         {[
           { e: prev, dir: "Previous" },
           { e: next, dir: "Next" },
         ].map(({ e, dir }) => (
-          <Link key={dir} href={`/effects/${e.slug}`} className={`group container-x block py-12 transition-colors hover:bg-bg-2 ${dir === "Next" ? "md:border-l md:border-line md:text-right" : ""}`}>
+          <Link key={dir} href={`/effects/${e.slug}`} className={`group block rounded-[22px] border border-line bg-panel px-6 py-10 transition-colors hover:border-line-strong ${dir === "Next" ? "md:text-right" : ""}`}>
             <span className="label text-muted">
               {dir} · Nº {String(e.number).padStart(2, "0")}
             </span>
-            <span className="mt-2 block font-serif text-[clamp(32px,4vw,56px)] leading-none tracking-[-0.03em] transition-transform duration-700 ease-[var(--ease-out-expo)] group-hover:italic">
+            <span className="display mt-2 block text-[clamp(30px,3.6vw,48px)] transition-colors group-hover:text-accent">
               {e.name}
             </span>
           </Link>
@@ -174,7 +174,7 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
 function DocSection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
     <section id={id} className="scroll-mt-24">
-      <h2 className="mb-5 flex items-baseline gap-3 border-b border-line pb-3 font-serif text-[30px] leading-none tracking-[-0.02em]">{title}</h2>
+      <h2 className="mb-5 flex items-baseline gap-3 border-b border-line pb-3 text-[24px] font-medium leading-none tracking-[-0.03em]">{title}</h2>
       {children}
     </section>
   );

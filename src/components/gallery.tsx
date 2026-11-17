@@ -53,21 +53,21 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
 
   return (
     <div>
-      <div className="sticky top-[60px] z-30 -mx-[clamp(16px,3.2vw,48px)] mb-6 border-y border-line bg-bg/85 px-[clamp(16px,3.2vw,48px)] backdrop-blur-md">
-        <div className="flex flex-col gap-3 py-3 2xl:flex-row 2xl:items-center 2xl:justify-between">
-          <div className="no-scrollbar -mx-1 flex min-w-0 flex-1 items-center gap-1 overflow-x-auto px-1" role="tablist" aria-label="Filter by category">
+      <div className="sticky top-[76px] z-30 mb-5">
+        <div className="flex flex-col gap-2 rounded-[22px] border border-line bg-glass p-1.5 shadow-[0_10px_40px_-20px_rgb(0_0_0/0.5)] backdrop-blur-xl xl:flex-row xl:items-center xl:rounded-full">
+          <div className="no-scrollbar flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto" role="tablist" aria-label="Filter by category">
             <FilterChip active={cat === "all"} onClick={() => setCat("all")} count={effects.length}>
               All
             </FilterChip>
             {categories.map((c) => (
-              <FilterChip key={c.id} active={cat === c.id} onClick={() => setCat(c.id)} count={counts[c.id]}>
-                <span className="font-mono text-[10px] opacity-60">{c.letter}</span> {c.name}
+              <FilterChip key={c.id} active={cat === c.id} onClick={() => setCat(c.id)} count={counts[c.id]} title={c.name}>
+                {c.name.split(" ")[0]}
               </FilterChip>
             ))}
           </div>
-          <div className="flex items-center gap-2">
-            <label className="group relative flex h-9 flex-1 items-center gap-2 border-b border-line-strong px-1 focus-within:border-fg 2xl:w-60 2xl:flex-none">
-              <Search className="size-3.5 text-muted" aria-hidden />
+          <div className="flex items-center gap-1.5">
+            <label className="group relative flex h-9 flex-1 items-center gap-2 rounded-full border border-line bg-panel px-3 transition-colors focus-within:border-line-strong xl:w-64 xl:flex-none">
+              <Search className="size-3.5 text-faint" aria-hidden />
               <span className="sr-only">Search effects</span>
               <input
                 ref={input}
@@ -82,7 +82,7 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
                   <X className="size-3.5" />
                 </button>
               ) : (
-                <kbd className="hidden rounded border border-line px-1.5 font-mono text-[10px] text-faint sm:inline">/</kbd>
+                <kbd className="kbd hidden sm:inline-grid">/</kbd>
               )}
             </label>
             <label className="relative">
@@ -90,7 +90,7 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortId)}
-                className="h-9 cursor-pointer appearance-none border-b border-line-strong bg-transparent pr-6 pl-1 text-sm outline-none focus-visible:border-fg"
+                className="h-9 cursor-pointer appearance-none rounded-full border border-line bg-panel pr-8 pl-3.5 text-sm outline-none focus-visible:border-line-strong"
               >
                 {sorts.map((s) => (
                   <option key={s.id} value={s.id} className="bg-bg text-fg">
@@ -98,7 +98,7 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
                   </option>
                 ))}
               </select>
-              <span aria-hidden className="pointer-events-none absolute top-1/2 right-1 -translate-y-1/2 text-[10px] text-muted">
+              <span aria-hidden className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-[10px] text-muted">
                 ▾
               </span>
             </label>
@@ -106,13 +106,13 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
         </div>
       </div>
 
-      <p className="label mb-4 text-muted" aria-live="polite">
+      <p className="label mb-4 px-1 text-faint" aria-live="polite">
         {list.length} {list.length === 1 ? "effect" : "effects"}
         {q ? ` matching “${query.trim()}”` : ""}
       </p>
 
       <LayoutGroup>
-        <motion.div layout className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <motion.div layout className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <AnimatePresence mode="popLayout" initial={false}>
             {list.map((e, i) => (
               <motion.div
@@ -138,30 +138,35 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
   );
 }
 
-function FilterChip({ active, onClick, count, children }: { active: boolean; onClick: () => void; count: number; children: React.ReactNode }) {
+function FilterChip({ active, onClick, count, children, title }: { active: boolean; onClick: () => void; count: number; children: React.ReactNode; title?: string }) {
   return (
     <button
       type="button"
       role="tab"
       aria-selected={active}
       onClick={onClick}
-      className={`relative flex h-9 shrink-0 items-center gap-1.5 px-3 text-sm whitespace-nowrap transition-colors ${active ? "text-fg" : "text-muted hover:text-fg"}`}
+      title={title}
+      className={`relative flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm whitespace-nowrap transition-colors ${active ? "text-fg" : "text-muted hover:text-fg"}`}
     >
-      {children}
-      <sup className="font-mono text-[9px] tabular-nums opacity-60">{count}</sup>
-      {active ? <motion.span layoutId="chip" className="absolute inset-x-2 bottom-0 h-px bg-accent" transition={{ type: "spring", stiffness: 500, damping: 40 }} /> : null}
+      {active ? <motion.span layoutId="chip" className="absolute inset-0 rounded-full border border-line-strong bg-panel-2" transition={{ type: "spring", stiffness: 500, damping: 40 }} /> : null}
+      <span className="relative">{children}</span>
+      <span className="relative font-mono text-[10.5px] tabular-nums text-faint">{count}</span>
     </button>
   );
 }
 
+/** asciicn-style framed empty state. */
 function EmptyState({ query, onReset }: { query: string; onReset: () => void }) {
+  const msg = `no type matches "${query.trim().slice(0, 24)}"`;
+  const bar = "─".repeat(msg.length + 4);
   return (
-    <div className="flex flex-col items-start gap-6 border-t border-line py-20">
-      <p className="font-serif text-[clamp(48px,9vw,140px)] leading-[0.9] tracking-[-0.04em] text-balance">
-        No type
-        <br />
-        <span className="italic text-muted">matches</span> <span className="text-accent">“{query.trim()}”</span>
-      </p>
+    <div className="flex flex-col items-center gap-6 py-20 text-center">
+      <pre aria-hidden className="ascii text-[13px] text-muted sm:text-[15px]">
+        {`┌${bar}┐\n│  `}
+        <span className="text-fg">{msg}</span>
+        {`  │\n└${bar}┘`}
+      </pre>
+      <p className="sr-only">No type matches “{query.trim()}”.</p>
       <p className="max-w-md text-muted">Try a motion word — “scroll”, “pointer”, “variable”, “mask” — or browse every category.</p>
       <button type="button" className="btn" onClick={onReset}>
         Clear search <span className="btn-arrow">→</span>

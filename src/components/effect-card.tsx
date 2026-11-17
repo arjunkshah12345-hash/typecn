@@ -8,26 +8,19 @@ import { categories, type EffectMeta } from "@/registry/types";
 import { defaultProps } from "@/registry/effects";
 import { EffectRenderer, defaultTypography } from "./effect-renderer";
 
-const tones = {
-  ink: "bg-[#161512] text-paper",
-  paper: "bg-paper text-ink",
-  accent: "bg-accent text-[#120a06]",
-  bone: "bg-bone text-ink",
-} as const;
-
-export function EffectCard({ meta, index }: { meta: EffectMeta; index: number }) {
+/** A live effect in a rounded catalogue card with a name/category footer bar (dithercn-style). */
+export function EffectCard({ meta, index, size, className = "" }: { meta: EffectMeta; index: number; size?: number; className?: string }) {
   const [replay, setReplay] = useState(0);
   const [progress, setProgress] = useState(0.5);
   const cardRef = useRef<HTMLElement>(null);
-  const tone = meta.card.tone ?? "ink";
   const cat = categories.find((c) => c.id === meta.category)!;
   const sticky = meta.slug === "sticky-typography";
-  // Interactive previews sit above the card link so pointer/click effects work.
   const interactive = meta.kind === "pointer" || !!meta.hint;
+  const wide = meta.card.span === 2;
   useScrollProgress(cardRef, setProgress, { enabled: sticky });
 
   const values = defaultProps(meta);
-  const typography = { ...defaultTypography(meta), size: meta.card.size ?? 48 };
+  const typography = { ...defaultTypography(meta), size: size ?? meta.card.size ?? 48 };
   const extra: Record<string, unknown> = {};
   if (meta.kind === "timed") extra.trigger = "inView";
   if (sticky) extra.progress = progress;
@@ -36,32 +29,28 @@ export function EffectCard({ meta, index }: { meta: EffectMeta; index: number })
   return (
     <article
       ref={cardRef}
-      className={`group relative flex min-h-[340px] flex-col overflow-hidden ${tones[tone]} ${meta.card.span === 2 ? "md:col-span-2" : ""} transition-[transform] duration-700 ease-[var(--ease-out-expo)]`}
+      className={`group relative flex min-h-[320px] flex-col overflow-hidden rounded-[22px] border border-line bg-panel transition-[border-color,transform] duration-500 ease-[var(--ease-out-expo)] hover:border-line-strong ${wide && !className ? "md:col-span-2" : ""} ${className}`}
       style={{ animationDelay: `${index * 30}ms` }}
     >
-      <header className="relative z-10 flex items-start justify-between gap-4 p-4 sm:p-5">
-        <div className="flex items-baseline gap-3 whitespace-nowrap">
-          <span className="font-mono text-[11px] tabular-nums opacity-60">{String(meta.number).padStart(2, "0")}</span>
-          <span className="label opacity-60">
-            {cat.letter} · {cat.name.split(" ")[0]}
-          </span>
-        </div>
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,color-mix(in_oklch,var(--fg)_4%,transparent),transparent_60%)]" aria-hidden />
+      <header className="relative z-20 flex items-center justify-between gap-3 p-3.5">
+        <span className="font-mono text-[11px] tabular-nums text-faint">{String(meta.number).padStart(2, "0")}</span>
         <div className="flex items-center gap-1">
-          {meta.hint && meta.card.span === 2 ? <span className="label hidden opacity-0 transition-opacity duration-500 group-hover:opacity-60 sm:inline">{meta.hint}</span> : null}
+          {meta.hint && wide ? <span className="chip opacity-0 transition-opacity duration-300 group-hover:opacity-100">{meta.hint}</span> : null}
           <button
             type="button"
             onClick={() => setReplay((r) => r + 1)}
-            className="relative z-20 grid size-8 place-items-center rounded-full opacity-60 transition hover:bg-current/10 hover:opacity-100 focus-visible:opacity-100"
+            className="grid size-7 place-items-center rounded-full border border-transparent text-faint opacity-0 transition hover:border-line hover:bg-panel-2 hover:text-fg focus-visible:opacity-100 group-hover:opacity-100"
             aria-label={`Replay ${meta.name}`}
             title="Replay"
           >
-            <RotateCcw className="size-3.5 transition-transform duration-500 group-hover:-rotate-45" />
+            <RotateCcw className="size-3.5" />
           </button>
         </div>
       </header>
 
-      <div className={`relative flex flex-1 items-center px-4 sm:px-6 ${interactive ? "z-10" : ""} ${sticky ? "h-[260px]" : ""} ${meta.card.span === 2 ? "justify-start" : "justify-center text-center"}`}>
-        <div className={`w-full ${sticky ? "h-[240px]" : ""} ${meta.slug === "text-trail" ? "self-stretch" : ""}`}>
+      <div className={`relative flex flex-1 items-center px-5 sm:px-7 ${interactive ? "z-10" : ""} ${sticky ? "h-[240px]" : ""} ${wide ? "justify-start" : "justify-center text-center"}`}>
+        <div className={`w-full ${sticky ? "h-[220px]" : ""} ${meta.slug === "text-trail" ? "self-stretch" : ""}`}>
           <EffectRenderer
             key={replay}
             meta={meta}
@@ -70,25 +59,25 @@ export function EffectCard({ meta, index }: { meta: EffectMeta; index: number })
             replayKey={replay}
             extra={extra}
             text={meta.card.text}
-            style={meta.slug === "text-trail" ? { minHeight: 220, width: "100%" } : undefined}
+            style={meta.slug === "text-trail" ? { minHeight: 200, width: "100%" } : undefined}
           />
         </div>
       </div>
 
-      <footer className="relative z-10 mt-auto flex items-end justify-between gap-4 p-4 sm:p-5">
+      <footer className="relative z-20 mt-4 flex items-center justify-between gap-4 border-t border-line bg-bg/40 px-4 py-3">
         <div className="min-w-0">
-          <h3 className="font-serif text-[22px] leading-none tracking-[-0.02em]">{meta.name}</h3>
-          <p className="mt-1.5 max-w-[34ch] text-[13px] leading-snug opacity-65">{meta.tagline}</p>
+          <h3 className="truncate text-[15px] font-medium tracking-[-0.01em]">{meta.name}</h3>
+          <p className="truncate text-[12.5px] text-faint">{meta.tagline}</p>
         </div>
-        <span className="label flex shrink-0 translate-y-1 items-center gap-1 opacity-0 transition-all duration-500 ease-[var(--ease-out-expo)] group-focus-within:translate-y-0 group-focus-within:opacity-100 group-hover:translate-y-0 group-hover:opacity-100">
-          Open <ArrowUpRight className="size-3.5" />
+        <span className="flex shrink-0 items-center gap-1.5 text-[12.5px] text-muted">
+          <span className="transition-opacity duration-300 group-hover:opacity-0">{cat.name.split(" ")[0]}</span>
+          <ArrowUpRight className="absolute right-4 size-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
         </span>
       </footer>
 
-      <Link href={`/effects/${meta.slug}`} className="absolute inset-0 z-[5]" aria-label={`Open ${meta.name} in the playground`}>
+      <Link href={`/effects/${meta.slug}`} className="absolute inset-0 z-[5] rounded-[22px]" aria-label={`Open ${meta.name} in the playground`}>
         <span className="sr-only">Open {meta.name}</span>
       </Link>
-      <span aria-hidden className="pointer-events-none absolute inset-0 z-[6] border border-current opacity-0 transition-opacity duration-500 group-hover:opacity-25" />
     </article>
   );
 }

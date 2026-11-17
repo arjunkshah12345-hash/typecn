@@ -21,7 +21,7 @@ export async function copyText(text: string) {
   }
 }
 
-export function CopyButton({ text, label = "Copy", className = "" }: { text: string; label?: string; className?: string }) {
+export function CopyButton({ text, label = "Copy", className = "", iconOnly = false }: { text: string; label?: string; className?: string; iconOnly?: boolean }) {
   const [done, setDone] = useState(false);
   useEffect(() => {
     if (!done) return;
@@ -32,7 +32,7 @@ export function CopyButton({ text, label = "Copy", className = "" }: { text: str
     <button
       type="button"
       onClick={async () => setDone(await copyText(text))}
-      className={`label inline-flex h-8 items-center gap-1.5 px-2.5 text-muted transition-colors hover:text-fg ${className}`}
+      className={`label inline-flex h-8 items-center justify-center gap-1.5 ${iconOnly ? "w-8" : "px-2.5"} text-muted transition-colors hover:text-fg ${className}`}
       aria-label={done ? "Copied" : label}
       data-copied={done || undefined}
     >
@@ -40,7 +40,7 @@ export function CopyButton({ text, label = "Copy", className = "" }: { text: str
         <Copy className={`absolute size-3.5 transition-all duration-300 ${done ? "scale-50 opacity-0" : "scale-100 opacity-100"}`} />
         <Check className={`absolute size-3.5 text-accent transition-all duration-300 ${done ? "scale-100 opacity-100" : "scale-50 opacity-0"}`} />
       </span>
-      <span aria-live="polite">{done ? "Copied" : label}</span>
+      {iconOnly ? <span className="sr-only" aria-live="polite">{done ? "Copied" : ""}</span> : <span aria-live="polite">{done ? "Copied" : label}</span>}
     </button>
   );
 }
