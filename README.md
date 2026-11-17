@@ -4,6 +4,8 @@
 
 # typecn
 
+**[Live site →](https://arjunkshah12345-hash.github.io/typecn/)**
+
 **Typography that moves.** 50 open-source text animations for React — find one, make it yours, ship it.
 
 Scramble effects, variable-font morphs, magnetic letters, scroll reveals, liquid text, WebGL texture masks and more. Every effect is a real, typed React component with live controls, generated code and accessibility built in.
@@ -47,7 +49,7 @@ export function Hero() {
 **A. shadcn registry** — copies `core.tsx` + the effect into `components/typecn` (requires the site to be deployed, or run it locally):
 
 ```bash
-npx shadcn@latest add http://localhost:3000/r/scramble-decode.json
+npx shadcn@latest add https://arjunkshah12345-hash.github.io/typecn/r/scramble-decode.json
 ```
 
 **B. Local package build**
@@ -168,6 +170,8 @@ npm run test:e2e     # Playwright: every effect, playground, sharing, a11y, view
 ```
 
 Set `NEXT_PUBLIC_SITE_URL` to your deployed origin so canonical URLs, Open Graph images and the registry install command point at it.
+
+**Static export (GitHub Pages).** `STATIC_EXPORT=1 NEXT_PUBLIC_BASE_PATH=/typecn npx next build` writes a fully static site to `out/`. `.github/workflows/pages.yml` does this on every push to `main` and deploys it.
 
 ### Repository layout
 

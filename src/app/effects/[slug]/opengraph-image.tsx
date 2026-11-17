@@ -15,3 +15,5 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   const e = effectBySlug[slug];
   return new ImageResponse(<OgFrame kicker={`<${e.component} />`} number={String(e.number).padStart(2, "0")} title={e.name} sub={e.tagline} />, { ...size, fonts: ogFonts() });
 }
+
+export const dynamic = "force-static";

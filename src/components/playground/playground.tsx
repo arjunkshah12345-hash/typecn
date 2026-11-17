@@ -63,7 +63,7 @@ export function Playground({ slug: initialSlug, mode = "effect" }: { slug: strin
     const p = encodeState(meta, state);
     if (mode === "page") p.set("effect", meta.slug);
     const qs = p.toString();
-    return `${window.location.origin}${mode === "page" ? "/playground" : `/effects/${meta.slug}`}${qs ? `?${qs}` : ""}`;
+    return `${window.location.origin}${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${mode === "page" ? "/playground" : `/effects/${meta.slug}`}${qs ? `?${qs}` : ""}`;
   }, [meta, state, mode]);
 
   useEffect(() => {

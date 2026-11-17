@@ -16,7 +16,7 @@ export function loadSources(slug: string) {
   if (!cache.has(slug)) {
     cache.set(
       slug,
-      fetch(`/r/${slug}.json`)
+      fetch(`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/r/${slug}.json`)
         .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
         .then((j: { files: RegistryFile[] }) => j.files)
         .catch(() => {

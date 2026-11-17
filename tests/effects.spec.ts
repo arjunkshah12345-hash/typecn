@@ -34,8 +34,13 @@ for (const e of effects) {
     await page.mouse.move(box!.x + box!.width * 0.55, box!.y + box!.height * 0.45, { steps: 8 });
     if (e.kind === "scroll") await stage.locator("[data-typecn-scroll]").evaluate((el) => el.scrollBy(0, el.clientHeight * 0.6));
     await page.waitForTimeout(e.slug === "vertical-rolling-headline" || e.slug === "morphing-headline" ? 2600 : 900);
-    const b = await stage.screenshot();
-    expect(Buffer.compare(a, b), "stage should change over time / with input").not.toBe(0);
+    // Bursty effects (e.g. Glitch Shift) can sit still for a few seconds — sample a few times.
+    let changed = false;
+    for (let i = 0; i < 8 && !changed; i++) {
+      if (i) await page.waitForTimeout(500);
+      changed = Buffer.compare(a, await stage.screenshot()) !== 0;
+    }
+    expect(changed, "stage should change over time / with input").toBe(true);
 
     // Long multi-line text through the playground textarea.
     await page.getByLabel("Text", { exact: true }).fill(LONG);

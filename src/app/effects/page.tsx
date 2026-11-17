@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Gallery } from "@/components/gallery";
-import { categories, type CategoryId } from "@/registry/types";
+import { GalleryRoute } from "@/components/gallery-route";
 
 export const metadata: Metadata = {
   title: "Explore 50 text animations",
@@ -8,9 +7,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/effects" },
 };
 
-export default async function EffectsPage({ searchParams }: { searchParams: Promise<{ category?: string }> }) {
-  const { category } = await searchParams;
-  const initial = categories.some((c) => c.id === category) ? (category as CategoryId) : undefined;
+export default function EffectsPage() {
   return (
     <div className="container-x pt-[96px] pb-24">
       <div className="mb-10 grid gap-6 border-b border-line pb-10 md:grid-cols-12 md:items-end">
@@ -21,7 +18,7 @@ export default async function EffectsPage({ searchParams }: { searchParams: Prom
           Fifty live effects in five families. Filter, search, hover to interact — then open one to make it yours.
         </p>
       </div>
-      <Gallery key={initial ?? "all"} initialCategory={initial} />
+      <GalleryRoute />
     </div>
   );
 }

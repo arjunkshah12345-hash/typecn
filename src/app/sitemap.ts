@@ -13,3 +13,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...effects.map((e) => ({ url: `${site.url}/effects/${e.slug}`, lastModified: now, changeFrequency: "monthly" as const, priority: 0.7 })),
   ];
 }
+
+export const dynamic = "force-static";
