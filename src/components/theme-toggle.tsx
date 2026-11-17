@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import { Moon, Sun } from "lucide-react";
 
 type Theme = "dark" | "light";
 
@@ -10,34 +11,49 @@ function subscribe(cb: () => void) {
   return () => obs.disconnect();
 }
 
-export function ThemeToggle() {
-  const theme = useSyncExternalStore<Theme>(
+export function setTheme(next: Theme) {
+  const el = document.documentElement;
+  el.dataset.theme = next;
+  // The dithercn and gradients.sh engines watch `class` for theme changes.
+  el.classList.toggle("dark", next === "dark");
+  el.classList.toggle("light", next === "light");
+  try {
+    localStorage.setItem("typecn-theme", next);
+  } catch {}
+}
+
+export function useTheme() {
+  return useSyncExternalStore<Theme>(
     subscribe,
     () => (document.documentElement.dataset.theme as Theme) ?? "dark",
     () => "dark",
   );
-  const next: Theme = theme === "dark" ? "light" : "dark";
+}
+
+/** Segmented sun/moon switch (hmm.css / ditherkit style). */
+export function ThemeToggle() {
+  const theme = useTheme();
   return (
-    <button
-      type="button"
-      onClick={() => {
-        document.documentElement.dataset.theme = next;
-        try {
-          localStorage.setItem("typecn-theme", next);
-        } catch {}
-      }}
-      className="group relative grid size-9 place-items-center rounded-full text-muted transition-colors hover:text-fg"
-      aria-label={`Switch to ${next} theme`}
-      title={`Switch to ${next} theme (T)`}
-    >
-      <span className="relative block size-4 overflow-hidden rounded-full border border-current">
-        <span
-          className="absolute inset-y-0 left-1/2 w-1/2 bg-current transition-transform duration-700 ease-[var(--ease-out-expo)]"
-          style={{ transform: theme === "dark" ? "translateX(0)" : "translateX(-100%)" }}
-        />
-      </span>
-    </button>
+    <div className="flex items-center rounded-full border border-line bg-panel p-0.5" role="group" aria-label="Theme">
+      {(["light", "dark"] as const).map((t) => {
+        const Icon = t === "light" ? Sun : Moon;
+        const on = theme === t;
+        return (
+          <button
+            key={t}
+            type="button"
+            onClick={() => setTheme(t)}
+            aria-pressed={on}
+            aria-label={`${t === "light" ? "Light" : "Dark"} theme`}
+            title={`${t === "light" ? "Light" : "Dark"} theme (T)`}
+            className={`grid size-7 place-items-center rounded-full transition-colors ${on ? "bg-panel-2 text-fg shadow-[inset_0_0_0_1px_var(--line-strong)]" : "text-faint hover:text-fg"}`}
+          >
+            <Icon className="size-3.5" strokeWidth={1.75} />
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
-export const themeScript = `(function(){try{var t=localStorage.getItem("typecn-theme");if(t!=="light"&&t!=="dark"){t="dark"}document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme="dark"}})();`;
+export const themeScript = `(function(){var d=document.documentElement,t="dark";try{t=localStorage.getItem("typecn-theme");if(t!=="light"&&t!=="dark"){t="dark"}}catch(e){}d.dataset.theme=t;d.classList.add(t)})();`;

@@ -42,7 +42,7 @@ export default async function DocPage({ params }: { params: Promise<{ slug?: str
                     className={`group flex items-baseline gap-3 py-1 text-[15px] transition-colors ${active ? "text-fg" : "text-muted hover:text-fg"}`}
                   >
                     <span className={`font-mono text-[10px] ${active ? "text-accent" : "text-faint"}`}>{String(k + 1).padStart(2, "0")}</span>
-                    <span className={active ? "font-serif text-[17px] italic" : ""}>{x.title}</span>
+                    <span className={active ? "text-fg" : ""}>{x.title}</span>
                   </Link>
                 </li>
               );
@@ -55,13 +55,13 @@ export default async function DocPage({ params }: { params: Promise<{ slug?: str
       </aside>
       <article className="min-w-0 lg:col-span-8">
         <p className="label mb-4 text-accent">Docs · {String(i + 1).padStart(2, "0")}</p>
-        <h1 className="mb-6 font-serif text-[clamp(48px,7vw,104px)] leading-[0.9] tracking-[-0.045em]">{d.title}</h1>
-        <p className="mb-10 max-w-[50ch] font-serif text-[22px] leading-snug italic text-muted">{d.blurb}</p>
+        <h1 className="display mb-6 text-[clamp(44px,6vw,84px)]">{d.title}</h1>
+        <p className="mb-10 max-w-[50ch] text-[20px] leading-snug text-muted">{d.blurb}</p>
         <div className="space-y-5">{docContent[d.slug]}</div>
         {next ? (
-          <Link href={`/docs/${next.slug}`} className="group mt-20 block border-t border-line pt-6">
+          <Link href={`/docs/${next.slug}`} className="group mt-20 block rounded-[22px] border border-line bg-panel p-6 transition-colors hover:border-line-strong">
             <span className="label text-muted">Next</span>
-            <span className="mt-1 block font-serif text-[40px] leading-none tracking-[-0.03em] transition-all group-hover:italic">{next.title} →</span>
+            <span className="display mt-1 block text-[34px] transition-colors group-hover:text-accent">{next.title} →</span>
           </Link>
         ) : null}
       </article>

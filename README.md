@@ -189,6 +189,15 @@ tests/                              Playwright end-to-end suite
 
 See [CONTRIBUTING.md](CONTRIBUTING.md). In short: add `packages/typecn/src/effects/your-effect.tsx`, export it, add a registry entry with a control schema whose keys match the props, and run the checks. The e2e suite automatically tests every registry entry.
 
+## Credits
+
+The website (not the `typecn` package) uses code from these open-source projects:
+
+- [dithercn](https://github.com/opencoredev/dithercn) (MIT): the dither engine and the Starfield, Horizon and Dither Text components, installed with the shadcn CLI into `src/lib/dither` and `src/components/dithercn`.
+- [gradients.sh](https://gradients.sh) free set (MIT): Grain Gradient and Mesh Gradient, in `src/lib/gradient-engine` and `src/components/gradients`.
+- [ditherkit](https://github.com/jvgomg/ditherkit) (MIT): `@ditherkit/core`, vendored in `src/lib/ditherkit` because it isn't on npm yet. Its Atkinson kernel dithers the footer wordmark.
+- [asciicn](https://asciicn.vercel.app) and [hmm.css](https://arjunkshah12345-hash.github.io/hmm.css/): design references only, no code copied.
+
 ## License
 
 MIT © typecn contributors. Fonts used by the site — Fraunces, Bricolage Grotesque, Anybody and JetBrains Mono — are licensed under the SIL Open Font License 1.1 and loaded via `next/font`; they are not bundled with the package.

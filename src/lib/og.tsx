@@ -1,35 +1,68 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const dir = (pkg: string) => path.join(process.cwd(), "node_modules/@fontsource", pkg, "files");
+const file = (pkg: string, f: string) => fs.readFileSync(path.join(process.cwd(), "node_modules/@fontsource", pkg, "files", f));
 
 export function ogFonts() {
   return [
-    { name: "Fraunces", data: fs.readFileSync(path.join(dir("fraunces"), "fraunces-latin-300-normal.woff")), weight: 300 as const, style: "normal" as const },
-    { name: "Fraunces", data: fs.readFileSync(path.join(dir("fraunces"), "fraunces-latin-600-normal.woff")), weight: 600 as const, style: "normal" as const },
-    { name: "Bricolage", data: fs.readFileSync(path.join(dir("bricolage-grotesque"), "bricolage-grotesque-latin-400-normal.woff")), weight: 400 as const, style: "normal" as const },
+    { name: "Geist", data: file("geist-sans", "geist-sans-latin-400-normal.woff"), weight: 400 as const, style: "normal" as const },
+    { name: "Geist", data: file("geist-sans", "geist-sans-latin-600-normal.woff"), weight: 600 as const, style: "normal" as const },
+    { name: "GeistMono", data: file("geist-mono", "geist-mono-latin-400-normal.woff"), weight: 400 as const, style: "normal" as const },
   ];
 }
 
 export const ogSize = { width: 1200, height: 630 };
 
+const ACCENT = "#ff5b24";
+const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+
+/** A dithered glow rising from the bottom edge, as absolutely-positioned cells (satori has no canvas). */
+function DitherGlow() {
+  const cell = 10;
+  const cols = 1200 / cell;
+  const rows = 24;
+  const dots: React.ReactNode[] = [];
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      const nx = (x / cols - 0.5) * 2;
+      const d = y / (rows - 1);
+      const tone = Math.max(0, Math.min(1, d * 1.35 - nx * nx * 0.75 - 0.2));
+      if (tone * 16 > BAYER[(y % 4) * 4 + (x % 4)] + 0.5) {
+        dots.push(<div key={`${x}-${y}`} style={{ position: "absolute", left: x * cell + 2, top: 630 - (rows - y) * cell + 2, width: cell - 4, height: cell - 4, background: ACCENT, opacity: 0.35 + tone * 0.65 }} />);
+      }
+    }
+  }
+  return <div style={{ position: "absolute", left: 0, top: 0, width: 1200, height: 630, display: "flex" }}>{dots}</div>;
+}
+
+function Mark() {
+  const on = "1010010110100101";
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", width: 30, height: 30, gap: 2 }}>
+      {on.split("").map((b, i) => (
+        <div key={i} style={{ width: 6, height: 6, background: b === "1" ? ACCENT : "rgba(255,255,255,0.15)" }} />
+      ))}
+    </div>
+  );
+}
+
 export function OgFrame({ kicker, title, sub, number }: { kicker: string; title: string; sub: string; number?: string }) {
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "#0f0e0c", color: "#efe9df", padding: "56px 64px", fontFamily: "Bricolage" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: 22, color: "#9b9386", borderBottom: "1px solid rgba(239,233,223,0.15)", paddingBottom: 18 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, fontFamily: "Fraunces", fontSize: 34, color: "#efe9df", fontWeight: 300 }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", background: "#050506", color: "#f4f4f5", fontFamily: "Geist" }}>
+      <DitherGlow />
+      <div style={{ position: "absolute", left: 0, top: 0, width: 1200, height: 630, display: "flex", flexDirection: "column", padding: "56px 64px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 32, fontWeight: 600, letterSpacing: -1.2 }}>
+          <Mark />
           typecn
-          <div style={{ width: 9, height: 9, borderRadius: 9, background: "#ff5a1f", marginTop: 12 }} />
         </div>
-        <div style={{ display: "flex" }}>{kicker}</div>
+        <div style={{ display: "flex", fontFamily: "GeistMono", fontSize: 20, color: "#9f9fa9", border: "1px solid rgba(255,255,255,0.14)", borderRadius: 999, padding: "8px 18px" }}>{kicker}</div>
       </div>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {number ? <div style={{ fontSize: 26, color: "#ff5a1f", marginBottom: 8, display: "flex" }}>{`Nº ${number}`}</div> : null}
-        <div style={{ fontFamily: "Fraunces", fontWeight: 300, fontSize: title.length > 18 ? 116 : 150, lineHeight: 0.9, letterSpacing: -5 }}>{title}</div>
+      <div style={{ display: "flex", flexDirection: "column", marginTop: 70 }}>
+        {number ? <div style={{ display: "flex", fontFamily: "GeistMono", fontSize: 24, color: ACCENT, marginBottom: 14 }}>{`Nº ${number}`}</div> : null}
+        <div style={{ display: "flex", fontWeight: 600, fontSize: title.length > 18 ? 104 : 132, lineHeight: 0.95, letterSpacing: title.length > 18 ? -5 : -6.5 }}>{title}</div>
+        <div style={{ display: "flex", marginTop: 26, fontSize: 28, color: "#9f9fa9", maxWidth: 820 }}>{sub}</div>
       </div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", fontSize: 26, color: "#9b9386" }}>
-        <div style={{ maxWidth: 760, display: "flex" }}>{sub}</div>
-        <div style={{ display: "flex", background: "#ff5a1f", color: "#120a06", padding: "10px 18px", fontSize: 22 }}>50 effects · MIT</div>
       </div>
     </div>
   );

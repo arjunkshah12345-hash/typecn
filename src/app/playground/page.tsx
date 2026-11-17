@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PlaygroundPage() {
   return (
-    <div className="pt-[60px]">
+    <div className="pt-[84px]">
       <h1 className="sr-only">typecn playground</h1>
       <Playground slug="scramble-decode" mode="page" />
     </div>

@@ -1,100 +1,68 @@
-"use client";
-
 import Link from "next/link";
-import { useState } from "react";
-import { effectBySlug, defaultProps } from "@/registry/effects";
 import { site } from "@/lib/site";
-import { EffectRenderer, defaultTypography } from "./effect-renderer";
+import { Wordmark } from "./wordmark";
+import { DitherWordmark } from "./dither-wordmark";
 
-/** Effects the footer wordmark can wear. Click it to cycle — the surprise. */
-const wardrobe = [
-  "proximity-weight",
-  "cursor-repel",
-  "elastic-distortion",
-  "liquid-type",
-  "glitch-shift",
-  "stacked-echo",
-  "character-explosion",
-  "depth-type",
-  "magnetic-letters",
-  "jitter",
-  "hover-shuffle",
-  "breathing-type",
-  "chromatic-split",
-  "pendulum-type",
+const cols: { title: string; links: [string, string][] }[] = [
+  { title: "Library", links: [["Effects", "/effects"], ["Playground", "/playground"], ["Getting started", "/docs"], ["Installation", "/docs/installation"]] },
+  { title: "Craft", links: [["Animation principles", "/docs/animation-principles"], ["Accessibility", "/docs/accessibility"], ["Performance", "/docs/performance"], ["Browser support", "/docs/browser-support"]] },
+  { title: "Project", links: [["GitHub", site.repo], ["Contributing", "/docs/contributing"], ["License (MIT)", `${site.repo}/blob/main/LICENSE`]] },
+  {
+    title: "Built with",
+    links: [
+      ["dithercn", "https://dithercn.vercel.app"],
+      ["gradients.sh", "https://gradients.sh"],
+      ["ditherkit", "https://ditherkit.vercel.app"],
+      ["asciicn (inspiration)", "https://asciicn.vercel.app"],
+    ],
+  },
 ];
 
 export function Footer() {
-  const [i, setI] = useState(0);
-  const meta = effectBySlug[wardrobe[i % wardrobe.length]];
-  const next = () => setI((v) => v + 1);
   return (
-    <footer className="relative overflow-hidden border-t border-line">
-      <div className="container-x grid gap-10 pt-16 pb-6 md:grid-cols-12">
-        <div className="md:col-span-5">
-          <p className="font-serif text-[28px] leading-[1.05] tracking-[-0.02em] text-balance">
-            Fifty ways for words to move. <span className="italic text-muted">Free, open source, and yours to bend.</span>
-          </p>
+    <footer className="px-2 pb-2 sm:px-3 sm:pb-3">
+      <div className="overflow-hidden rounded-[28px] border border-line bg-panel sm:rounded-[36px]">
+        <div className="grid gap-10 px-6 pt-12 pb-4 sm:px-10 lg:grid-cols-[1fr_2fr]">
+          <div>
+            <Link href="/" className="text-[20px]" aria-label="typecn home">
+              <Wordmark />
+            </Link>
+            <p className="mt-4 max-w-[30ch] text-[15px] leading-relaxed text-muted">Fifty ways for words to move. Free, open source, and yours to bend.</p>
+          </div>
+          <div className="grid grid-cols-2 gap-8 text-[14px] sm:grid-cols-4">
+            {cols.map((c) => (
+              <div key={c.title}>
+                <p className="mb-3 text-[13px] text-faint">{c.title}</p>
+                <ul className="space-y-2">
+                  {c.links.map(([l, h]) => (
+                    <li key={l}>
+                      {h.startsWith("http") ? (
+                        <a href={h} target="_blank" rel="noreferrer" className="text-muted transition-colors hover:text-fg">
+                          {l} <span className="text-faint">↗</span>
+                        </a>
+                      ) : (
+                        <Link href={h} className="text-muted transition-colors hover:text-fg">
+                          {l}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-2 gap-6 text-sm md:col-span-6 md:col-start-7 md:grid-cols-3">
-          <FooterCol title="Library" links={[["Explore", "/effects"], ["Playground", "/playground"], ["Getting started", "/docs"], ["Installation", "/docs/installation"]]} />
-          <FooterCol title="Craft" links={[["Animation principles", "/docs/animation-principles"], ["Accessibility", "/docs/accessibility"], ["Performance", "/docs/performance"], ["Browser support", "/docs/browser-support"]]} />
-          <FooterCol title="Project" links={[["GitHub", site.repo], ["Contributing", "/docs/contributing"], ["License (MIT)", `${site.repo}/blob/main/LICENSE`]]} />
+
+        {/* ditherkit: Atkinson-dithered wordmark lit by a moving light */}
+        <div className="px-4 pt-6 sm:px-8">
+          <DitherWordmark className="h-[clamp(90px,19vw,300px)]" cell={5} />
         </div>
-      </div>
 
-      <div className="container-x relative">
-        <button
-          type="button"
-          onClick={next}
-          className="group relative block w-full cursor-pointer text-left"
-          aria-label="typecn — click to change the effect"
-        >
-          <span className="label absolute top-2 right-0 z-10 flex items-center gap-2 text-muted">
-            <span className="dot-live" /> Nº {String(meta.number).padStart(2, "0")} {meta.name} — click to change
-          </span>
-          <span className="block select-none pt-8 pb-2" style={{ minHeight: "clamp(140px, 27vw, 420px)" }}>
-            <EffectRenderer
-              key={meta.slug + i}
-              meta={meta}
-              text="typecn"
-              values={{ ...defaultProps(meta), ...(meta.kind === "timed" ? { loop: true } : {}) }}
-              typography={{ ...defaultTypography(meta), font: meta.font === "mono" ? "mono" : meta.slug === "breathing-type" || meta.slug === "stacked-echo" || meta.slug === "depth-type" ? "wide" : "serif", size: "clamp(96px, 24vw, 380px)", tracking: -0.05, leading: 0.9, weight: 600 }}
-              style={{ display: "block" }}
-            />
-          </span>
-        </button>
-      </div>
-
-      <div className="container-x flex flex-col gap-2 border-t border-line py-5 text-xs text-muted sm:flex-row sm:justify-between">
-        <span>© {new Date().getFullYear()} typecn contributors · MIT License</span>
-        <span>
-          Set in Fraunces, Bricolage Grotesque, Anybody &amp; JetBrains Mono — all SIL Open Font License.
-        </span>
+        <div className="flex flex-col gap-2 border-t border-line px-6 py-5 text-[12.5px] text-faint sm:flex-row sm:justify-between sm:px-10">
+          <span>© {new Date().getFullYear()} typecn contributors · MIT License</span>
+          <span>Wordmark dithered live with ditherkit&apos;s Atkinson kernel. Move your pointer over it.</span>
+        </div>
       </div>
     </footer>
-  );
-}
-
-function FooterCol({ title, links }: { title: string; links: [string, string][] }) {
-  return (
-    <div>
-      <p className="label mb-3 text-faint">{title}</p>
-      <ul className="space-y-1.5">
-        {links.map(([l, h]) => (
-          <li key={l}>
-            {h.startsWith("http") ? (
-              <a href={h} target="_blank" rel="noreferrer" className="ulink text-muted hover:text-fg">
-                {l} ↗
-              </a>
-            ) : (
-              <Link href={h} className="ulink text-muted hover:text-fg">
-                {l}
-              </Link>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }

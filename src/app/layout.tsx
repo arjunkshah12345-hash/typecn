@@ -20,8 +20,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0f0e0c" },
-    { media: "(prefers-color-scheme: light)", color: "#f1ece3" },
+    { media: "(prefers-color-scheme: dark)", color: "#050506" },
+    { media: "(prefers-color-scheme: light)", color: "#fafaf9" },
   ],
 };
 
@@ -31,7 +31,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className="grain">
+      <body>
         <Header />
         <main id="main">{children}</main>
         <Footer />

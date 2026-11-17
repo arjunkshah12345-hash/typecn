@@ -1,13 +1,21 @@
 import { expect, test } from "@playwright/test";
 
-test("home renders hero, gallery of 50 live cards and closing", async ({ page }) => {
+test("home renders hero, featured live cards, playground demo, tree and closing", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
   await page.goto("/");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Words should move.");
-  await expect(page.getByRole("link", { name: "Explore effects" })).toBeVisible();
-  await expect(page.locator("#collection article")).toHaveCount(50);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Type that moves.");
+  await expect(page.getByRole("link", { name: "Browse effects" }).first()).toBeVisible();
+  await expect(page.locator("section[aria-labelledby=featured-title] article")).toHaveCount(10);
+  // Tune demo: moving a slider updates the generated code.
+  const amp = page.locator("section[aria-labelledby=tune-title]").getByRole("slider", { name: /Amplitude/ });
+  await amp.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(page.locator("section[aria-labelledby=tune-title] pre")).toContainText("amplitude={0.27}");
+  // Library tree: switching family updates the file list.
+  await page.getByRole("tab", { name: /cinematic/ }).click();
+  await expect(page.getByRole("link", { name: /grand-finale\.tsx/ })).toBeVisible();
   await page.mouse.wheel(0, 20000);
   await page.waitForTimeout(800);
   expect(errors).toEqual([]);
@@ -24,7 +32,7 @@ test("gallery search, filter, sort and empty state", async ({ page }) => {
   await expect(page.getByText(/effects? matching “scroll”/)).toBeVisible();
   expect(await cards.count()).toBeGreaterThan(1);
   await page.getByPlaceholder("Search 50 effects").fill("zzzzqqq");
-  await expect(page.getByText("No type")).toBeVisible();
+  await expect(page.getByText(/no type matches/i).first()).toBeVisible();
   await page.getByRole("button", { name: "Clear search" }).first().click();
   await expect(cards).toHaveCount(50);
   await page.getByRole("combobox").selectOption("name");
@@ -183,4 +191,15 @@ test("mobile navigation opens and navigates", async ({ page }) => {
   await page.getByRole("navigation", { name: "Mobile" }).getByRole("link", { name: /Playground/ }).click();
   await expect(page).toHaveURL(/\/playground/);
   await expect(page.getByRole("navigation", { name: "Mobile" })).toHaveCount(0);
+});
+
+test("command menu searches and navigates", async ({ page }) => {
+  await page.goto("/");
+  await page.keyboard.press("ControlOrMeta+k");
+  const dialog = page.getByRole("dialog", { name: "Search typecn" });
+  await expect(dialog).toBeVisible();
+  await page.keyboard.type("glitch");
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/\/effects\/glitch-shift/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Glitch Shift");
 });

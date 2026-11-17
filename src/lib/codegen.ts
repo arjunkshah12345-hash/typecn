@@ -13,8 +13,8 @@ export interface PlaygroundState {
   values: Record<string, ControlValue>;
 }
 
-export const DEFAULT_COLOR = "#efe9df";
-export const DEFAULT_BG = "#0f0e0c";
+export const DEFAULT_COLOR = "#f4f4f5";
+export const DEFAULT_BG = "#0b0b0d";
 
 export function initialState(meta: EffectMeta): PlaygroundState {
   return {

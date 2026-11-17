@@ -2,23 +2,28 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { ArrowRight, MousePointer2 } from "lucide-react";
 import { effectBySlug, defaultProps } from "@/registry/effects";
 import { useReducedMotion } from "typecn";
+import { Horizon } from "@/components/dithercn/horizon";
+import { Starfield } from "@/components/dithercn/starfield";
+import { installCode } from "@/lib/codegen";
 import { EffectRenderer, defaultTypography } from "./effect-renderer";
+import { CopyButton } from "./copy-button";
 
-/** The hero cycles through real registry effects on the same headline. */
+/** The headline cycles through real registry effects. */
 const sequence: { slug: string; ms: number; props?: Record<string, unknown>; hint?: string }[] = [
-  { slug: "grand-finale", ms: 7200, props: { loop: false, stagger: 38 } },
-  { slug: "scramble-decode", ms: 4600, props: { loop: false, duration: 900, stagger: 45 } },
-  { slug: "proximity-weight", ms: 7000, props: { minWeight: 120, maxWeight: 900, radius: 340 }, hint: "Move your pointer over the headline" },
-  { slug: "blur-resolve", ms: 4200, props: { loop: false, from: "random", stagger: 22 } },
-  { slug: "variable-morph", ms: 6200, props: { loop: false, duration: 3800, stagger: 40, poses: [{ wght: 100, SOFT: 100, WONK: 0 }, { wght: 900, SOFT: 0, WONK: 1 }, { wght: 250, SOFT: 50, WONK: 1 }, { wght: 400, SOFT: 100, WONK: 0 }] } },
-  { slug: "cursor-repel", ms: 7000, props: { radius: 170, force: 2 }, hint: "Push through the letters" },
-  { slug: "elastic-entrance", ms: 4200, props: { loop: false } },
+  { slug: "scramble-decode", ms: 4200, props: { loop: false, duration: 900, stagger: 40 } },
+  { slug: "proximity-weight", ms: 6500, props: { minWeight: 160, maxWeight: 900, radius: 300 }, hint: "Move your pointer over the headline" },
+  { slug: "blur-resolve", ms: 3800, props: { loop: false, from: "random", stagger: 22 } },
+  { slug: "cursor-repel", ms: 6500, props: { radius: 150, force: 2 }, hint: "Push through the letters" },
+  { slug: "elastic-entrance", ms: 3800, props: { loop: false } },
+  { slug: "grand-finale", ms: 7000, props: { loop: false, stagger: 34 } },
+  { slug: "character-cascade", ms: 3600, props: { loop: false } },
 ];
 
-const HEADLINE = "Words should\nmove.";
+const HEADLINE = "Type that\nmoves.";
 
 export function Hero() {
   const [i, setI] = useState(0);
@@ -26,6 +31,7 @@ export function Hero() {
   const reduced = useReducedMotion();
   const step = sequence[i];
   const meta = effectBySlug[step.slug];
+  const install = installCode(effectBySlug["scramble-decode"]).registry;
 
   useEffect(() => {
     if (reduced) return;
@@ -39,104 +45,114 @@ export function Hero() {
   };
 
   return (
-    <section className="relative flex min-h-[100svh] flex-col pt-[60px]" aria-labelledby="hero-title">
-      <div className="container-x flex items-center justify-between border-b border-line py-3">
-        <span className="label text-muted">Nº 001 — An open-source kinetic typography library</span>
-        <span className="label hidden text-muted sm:inline">50 effects · 5 categories · React · MIT</span>
-      </div>
+    <section className="px-2 pt-2 sm:px-3 sm:pt-3" aria-labelledby="hero-title">
+      <div className="relative isolate flex min-h-[min(860px,100svh)] flex-col items-center overflow-hidden rounded-[28px] border border-line bg-bg px-4 pt-[120px] pb-10 sm:rounded-[36px]">
+        {/* dithercn backgrounds: a slow starfield and a dithered planet horizon */}
+        <Starfield aria-hidden className="!absolute inset-0 -z-20 opacity-70" density={0.7} drift={0.6} nebula={0.25} palette={["--dither-paper", "--dither-color-grey"]} />
+        <Horizon aria-hidden className="!absolute inset-x-0 bottom-0 -z-10 h-[48%]" horizon={0.34} curve={0.55} glow={0.9} aurora={0.7} stars={0} cell={3} />
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[30%] bg-gradient-to-t from-bg/90 to-transparent" />
 
-      <div className="container-x relative flex flex-1 flex-col justify-center py-10">
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+          <Link href="/effects" className="chip transition-colors hover:text-fg">
+            <span className="rounded-full bg-accent/15 px-1.5 text-[11px] font-medium text-accent">New</span>
+            50 effects · shadcn registry · MIT
+            <ArrowRight className="size-3" />
+          </Link>
+        </motion.div>
+
         <h1 id="hero-title" className="sr-only">
-          typecn — Words should move. 50 open-source text animations for React.
+          typecn — Type that moves. 50 open-source text animations for React.
         </h1>
-        <div className="relative" style={{ minHeight: "calc(2 * 0.92 * clamp(60px, 13.2vw, 236px) + 0.4em)" }}>
+        <div className="relative mt-8 flex w-full max-w-[1100px] items-center justify-center text-center" style={{ minHeight: "calc(2 * 0.95 * clamp(56px, 10.5vw, 150px) + 0.25em)" }}>
           <EffectRenderer
             key={`${step.slug}-${cycle}-${i}`}
             meta={meta}
             text={HEADLINE}
             values={defaultProps(meta)}
-            typography={{ ...defaultTypography(meta), font: "serif", size: "clamp(60px, 13.2vw, 236px)", weight: 400, tracking: -0.045, leading: 0.92 }}
-            style={{ display: "block" }}
+            typography={{ ...defaultTypography(meta), font: "grotesk", size: "clamp(56px, 10.5vw, 150px)", weight: 600, tracking: -0.055, leading: 0.95 }}
+            style={{ display: "block", fontFamily: "var(--font-geist)", textAlign: "center", width: "100%" }}
             extra={{ as: "p", ...step.props }}
           />
         </div>
-      </div>
 
-      <div className="container-x grid gap-8 pb-8 md:grid-cols-12 md:items-end">
-        <div className="md:col-span-5">
-          <p className="max-w-[30ch] text-[clamp(18px,1.6vw,22px)] leading-[1.35] text-balance">
-            50 open-source text animations. <span className="text-muted">Find one. Make it yours. Ship it.</span>
-          </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            <Link href="/effects" className="btn btn-accent">
-              Explore effects <span className="btn-arrow">→</span>
-            </Link>
-            <Link href="/playground" className="btn">
-              Open playground <span className="btn-arrow">→</span>
-            </Link>
-          </div>
+        <p className="mt-7 max-w-[34ch] text-center text-[clamp(16px,1.5vw,19px)] leading-[1.5] text-balance text-muted">
+          50 open-source text animations for React. Tune one in the playground, then install it as code you own.
+        </p>
+
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-2">
+          <Link href="/effects" className="btn btn-accent">
+            Browse effects <ArrowRight className="btn-arrow size-4" />
+          </Link>
+          <Link href="/playground" className="btn">
+            Open playground
+          </Link>
         </div>
 
-        <div className="md:col-span-6 md:col-start-7">
-          <div className="flex items-center justify-between gap-4 border-b border-line pb-2">
-            <span className="label flex items-center gap-2 text-muted">
+        <div className="mt-6 flex max-w-full items-center gap-2 rounded-full border border-line bg-glass py-1 pr-1 pl-4 font-mono text-[12.5px] text-muted backdrop-blur">
+          <span className="text-accent">$</span>
+          <span className="truncate">npx shadcn add …/r/scramble-decode.json</span>
+          <CopyButton text={install} label="Copy install command" iconOnly className="!h-7 !w-7 shrink-0 rounded-full hover:bg-panel-2" />
+        </div>
+
+        {/* now playing */}
+        <div className="mt-auto w-full max-w-[640px] pt-14">
+          <div className="flex items-center justify-between gap-3 px-1 pb-2 text-[12.5px]">
+            <span className="flex items-center gap-2 text-muted">
               <span className="dot-live" aria-hidden /> Now playing
             </span>
-            <Link href={`/effects/${meta.slug}`} className="label ulink text-fg" aria-live="polite">
-              Nº {String(meta.number).padStart(2, "0")} — {meta.name} ↗
-            </Link>
+            <AnimatePresence mode="wait">
+              <motion.span key={step.slug} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.2 }}>
+                {step.hint ? (
+                  <span className="flex items-center gap-1.5 text-accent">
+                    <MousePointer2 className="size-3" /> {step.hint}
+                  </span>
+                ) : (
+                  <Link href={`/effects/${meta.slug}`} className="text-fg hover:underline" aria-live="polite">
+                    {meta.name} <span className="text-faint">· Nº {String(meta.number).padStart(2, "0")}</span>
+                  </Link>
+                )}
+              </motion.span>
+            </AnimatePresence>
           </div>
-          <ol className="mt-2 grid grid-cols-7 gap-1" aria-label="Hero sequence">
+          <ol className="grid grid-cols-7 gap-1.5" aria-label="Hero sequence">
             {sequence.map((s, k) => (
               <li key={s.slug}>
-                <button
-                  type="button"
-                  onClick={() => go(k)}
-                  className="group block w-full py-2 text-left"
-                  aria-label={`Play ${effectBySlug[s.slug].name}`}
-                  aria-current={k === i ? "true" : undefined}
-                >
-                  <span className="relative block h-px w-full overflow-hidden bg-line-strong">
+                <button type="button" onClick={() => go(k)} className="group block w-full py-1.5" aria-label={`Play ${effectBySlug[s.slug].name}`} aria-current={k === i ? "true" : undefined}>
+                  <span className="relative block h-[3px] w-full overflow-hidden rounded-full bg-line-strong transition-colors group-hover:bg-faint">
                     {k === i ? (
                       <motion.span
                         key={`${i}-${cycle}`}
-                        className="absolute inset-0 origin-left bg-accent"
-                        initial={{ scaleX: 0 }}
-                        animate={{ scaleX: reduced ? 1 : 1 }}
+                        className="absolute inset-0 origin-left rounded-full bg-accent"
+                        initial={{ scaleX: reduced ? 1 : 0 }}
+                        animate={{ scaleX: 1 }}
                         transition={{ duration: reduced ? 0 : s.ms / 1000, ease: "linear" }}
                       />
                     ) : k < i ? (
-                      <span className="absolute inset-0 bg-fg/60" />
+                      <span className="absolute inset-0 rounded-full bg-fg/50" />
                     ) : null}
-                  </span>
-                  <span className={`mt-2 hidden truncate text-[11px] transition-colors sm:block ${k === i ? "text-fg" : "text-faint group-hover:text-muted"}`}>
-                    {effectBySlug[s.slug].name}
                   </span>
                 </button>
               </li>
             ))}
           </ol>
-          <p className="label mt-3 flex h-4 items-center gap-2 text-muted">
-            {step.hint ? (
-              <motion.span key={step.hint} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2 text-accent">
-                <span aria-hidden>↖</span> {step.hint}
-              </motion.span>
-            ) : (
-              <span>Every frame above is a real component from the library.</span>
-            )}
-          </p>
         </div>
       </div>
 
-      <div className="container-x flex items-center justify-between border-t border-line py-3">
-        <span className="label flex items-center gap-3 text-muted">
-          <span aria-hidden className="relative block h-5 w-px overflow-hidden bg-line">
-            <span className="motion-safe-only absolute inset-0 bg-fg" style={{ animation: "scroll-cue 2.2s cubic-bezier(0.76,0,0.24,1) infinite" }} />
-          </span>
-          Scroll the collection
-        </span>
-        <span className="label text-muted">typecn@{"0.1.0"}</span>
-      </div>
+      {/* stat strip (hmm.css) */}
+      <dl className="mx-auto flex max-w-[900px] flex-wrap items-center justify-center gap-x-9 gap-y-3 px-4 py-7 text-[14px]">
+        {[
+          ["Effects", "50"],
+          ["Dependencies", "react only"],
+          ["Reduced motion", "built in"],
+          ["Screen readers", "one clean line"],
+          ["License", "MIT"],
+        ].map(([k, v]) => (
+          <div key={k} className="flex items-baseline gap-2">
+            <dt className="text-fg">{k}</dt>
+            <dd className="font-mono text-[12px] text-faint">{v}</dd>
+          </div>
+        ))}
+      </dl>
     </section>
   );
 }

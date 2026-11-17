@@ -1,38 +1,38 @@
-"use client";
-
 import Link from "next/link";
-import { StickyTypography, TextMarquee } from "typecn";
+import { ArrowRight } from "lucide-react";
+import { MeshGradient } from "@/components/gradients/mesh-gradient";
+import { DitherText } from "@/components/dithercn/dither-text";
 
-/** The launch-recording moment: a pinned, scroll-scrubbed headline, then a marquee band. */
+/** hmm.css-style closing panel over a gradients.sh mesh, with a dithercn headline. */
 export function Closing() {
   return (
-    <section aria-label="Closing" className="relative">
-      <StickyTypography
-        as="div"
-        text={"NOW\nMAKE IT\nMOVE."}
-        distance={3.2}
-        fromScale={5}
-        invertColor="#ff5a1f"
-        style={{ fontFamily: "var(--font-wide)", fontWeight: 900, fontSize: "clamp(72px, 16vw, 260px)", lineHeight: 0.86, letterSpacing: "-0.02em", fontStretch: "125%" }}
-      />
-      <div className="border-y border-line bg-accent py-5 text-[#120a06]">
-        <TextMarquee
-          text="Typography that moves · 50 effects · open source · ready to ship"
-          velocity={70}
-          separator="✳"
-          style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(40px, 6vw, 96px)", fontStyle: "italic", letterSpacing: "-0.03em", lineHeight: 1.05 }}
+    <section aria-labelledby="closing-title" className="container-x pt-8 pb-16">
+      <div className="relative isolate flex min-h-[520px] flex-col items-center justify-center overflow-hidden rounded-[32px] border border-line px-6 py-20 text-center">
+        <MeshGradient
+          aria-hidden
+          className="!absolute inset-0 -z-10 opacity-60"
+          colors={["#ff5b24", "#8f9bff", "#ffb38a", "#2a1c5a"]}
+          background="var(--bg)"
+          speed={0.45}
+          grain={0.25}
+          blur={0.8}
         />
-      </div>
-      <div className="container-x grid gap-8 py-24 md:grid-cols-12 md:items-end">
-        <p className="font-serif text-[clamp(40px,5.4vw,84px)] leading-[0.95] tracking-[-0.035em] md:col-span-8 text-balance">
-          Find one. <span className="italic text-muted">Make it yours.</span> Ship it tonight.
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-[5] bg-[radial-gradient(55%_55%_at_50%_50%,var(--bg)_0%,transparent_100%)] opacity-85" />
+        <p className="chip mb-6">Free · Open source · MIT</p>
+        <h2 id="closing-title" className="display text-[clamp(52px,9vw,140px)]">
+          <DitherText as="span" fill="gradient" color="ink" direction="down" from={1} to={0.35} bloom="low" className="block">
+            Make it move.
+          </DitherText>
+        </h2>
+        <p className="mt-6 max-w-[40ch] text-[17px] leading-relaxed text-muted">
+          Fifty effects, one playground, and the source for all of it. Pick one and ship it tonight.
         </p>
-        <div className="flex flex-wrap gap-2 md:col-span-4 md:justify-end">
-          <Link href="/playground" className="btn btn-accent">
-            Start experimenting <span className="btn-arrow">→</span>
+        <div className="mt-8 flex flex-wrap justify-center gap-2">
+          <Link href="/effects" className="btn btn-accent">
+            Browse effects <ArrowRight className="btn-arrow size-4" />
           </Link>
           <Link href="/docs" className="btn">
-            Read the docs <span className="btn-arrow">→</span>
+            Read the docs
           </Link>
         </div>
       </div>

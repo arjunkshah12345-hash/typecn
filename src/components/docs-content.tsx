@@ -4,7 +4,7 @@ import { effects } from "@/registry/effects";
 import { site } from "@/lib/site";
 
 const P = ({ children }: { children: React.ReactNode }) => <p className="max-w-[64ch] text-[17px] leading-[1.7] text-muted [&_code]:font-mono [&_code]:text-[14px] [&_code]:text-fg">{children}</p>;
-const H = ({ children }: { children: React.ReactNode }) => <h2 className="mt-14 mb-4 border-b border-line pb-3 font-serif text-[30px] leading-none tracking-[-0.02em]">{children}</h2>;
+const H = ({ children }: { children: React.ReactNode }) => <h2 className="mt-14 mb-4 border-b border-line pb-3 text-[26px] font-medium leading-none tracking-[-0.03em]">{children}</h2>;
 const L = ({ items }: { items: React.ReactNode[] }) => (
   <ul className="max-w-[64ch] space-y-2 text-[16px] leading-relaxed text-muted [&_code]:font-mono [&_code]:text-[14px] [&_code]:text-fg">
     {items.map((x, i) => (

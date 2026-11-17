@@ -24,7 +24,7 @@ export function CodeBlock({
     return highlight(code);
   }, [code, lang]);
   return (
-    <div className={`code relative border border-line bg-[var(--code-bg)] ${className}`}>
+    <div className={`code relative overflow-hidden rounded-2xl border border-line bg-[var(--code-bg)] ${className}`}>
       {title || copy ? (
         <div className="flex items-center justify-between border-b border-line pl-4">
           <span className="label text-faint">{title ?? lang}</span>
