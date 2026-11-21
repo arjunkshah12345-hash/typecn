@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ScrambleText } from "typecn";
 import { site } from "@/lib/site";
 import { CodeBlock } from "../code-block";
+import { SectionHead } from "./section-head";
 
 const usage = `import { ScrambleText } from "@/components/typecn/effects/scramble-text";
 
@@ -31,36 +32,41 @@ const facts = [
   ["The registry", "Each effect is a shadcn registry item. One command copies core.tsx and the effect file; there is no runtime package to keep in sync."],
 ];
 
-/** dithercn-style "what's inside": a big two-column hairline list, then install + usage. */
+/** "What's inside": a big two-column hairline list, then install + usage. */
 export function Inside() {
   const [way, setWay] = useState(ways[0]);
   const [k, setK] = useState(0);
   return (
     <section className="container-x py-20 sm:py-28" aria-labelledby="inside-title">
-      <div className="mb-12 grid gap-6 md:grid-cols-2 md:items-end">
-        <h2 id="inside-title" className="display text-[clamp(44px,6.5vw,88px)]">
-          What&apos;s inside.
-        </h2>
-        <p className="max-w-[46ch] text-[17px] leading-relaxed text-muted md:justify-self-end">
-          typecn is an open-source library of kinetic type for React, shipped as source you copy into your repo — the shadcn way.
-        </p>
-      </div>
+      <SectionHead
+        id="inside-title"
+        n="04"
+        kicker="What's inside"
+        aside="MIT licensed"
+        title={
+          <>
+            Source you <em>own</em>.
+          </>
+        }
+      >
+        <p className="max-w-[44ch]">Open-source kinetic type for React, shipped as files you copy into your repo, the shadcn way.</p>
+      </SectionHead>
 
       <div className="grid gap-x-10 md:grid-cols-2">
         {facts.map(([t, d]) => (
           <div key={t} className="border-t border-line py-6">
-            <h3 className="text-[18px] font-medium tracking-[-0.01em]">{t}</h3>
+            <h3 className="italic-serif text-[24px] leading-tight">{t}</h3>
             <p className="mt-2.5 text-[15.5px] leading-relaxed text-muted">{d}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-12 grid min-w-0 gap-3 lg:grid-cols-2">
-        <div className="flex min-w-0 flex-col gap-3">
+      <div className="mt-12 grid min-w-0 border-t border-l border-line lg:grid-cols-2">
+        <div className="flex min-w-0 flex-col border-r border-b border-line">
           <button
             type="button"
             onClick={() => setK((v) => v + 1)}
-            className="group flex min-h-[150px] w-full items-center justify-between gap-4 rounded-[22px] border border-line bg-panel px-6 py-8 text-left"
+            className="group flex min-h-[150px] w-full items-center justify-between gap-4 border-b border-line px-6 py-8 text-left transition-colors hover:bg-bg-2"
             aria-label="Replay the ScrambleText example"
           >
             <ScrambleText
@@ -73,9 +79,11 @@ export function Inside() {
             />
             <span className="chip shrink-0 transition-colors group-hover:text-fg">Replay ↻</span>
           </button>
-          <CodeBlock code={usage} title="app/page.tsx" />
+          <div className="p-3">
+            <CodeBlock code={usage} title="app/page.tsx" />
+          </div>
         </div>
-        <div className="flex min-w-0 flex-col rounded-[22px] border border-line bg-panel p-2">
+        <div className="flex min-w-0 flex-col border-r border-b border-line p-2">
           <div className="flex gap-1 p-1 font-mono text-[13px]" role="tablist" aria-label="Installation method">
             {ways.map((w) => (
               <button
@@ -84,7 +92,7 @@ export function Inside() {
                 type="button"
                 aria-selected={w.id === way.id}
                 onClick={() => setWay(w)}
-                className={`rounded-full px-3 py-1.5 transition-colors ${w.id === way.id ? "bg-panel-2 text-fg shadow-[inset_0_0_0_1px_var(--line-strong)]" : "text-muted hover:text-fg"}`}
+                className={`rounded-full px-3 py-1.5 transition-colors ${w.id === way.id ? "bg-fg text-bg" : "text-muted hover:text-fg"}`}
               >
                 {w.label}
               </button>
@@ -94,9 +102,9 @@ export function Inside() {
             <CodeBlock code={way.code} lang="bash" title="terminal" />
           </div>
           <p className="px-3 pt-2 pb-3 text-[14px] text-muted">{way.note}</p>
-          <ul className="mt-auto grid grid-cols-2 gap-2 p-1 text-[13px]">
+          <ul className="mt-auto grid grid-cols-2 border-t border-line text-[13px]">
             {["SSR-safe", "Zero deps beyond React", "Typed props", "Reduced motion", "Pauses off-screen", "MIT licensed"].map((x) => (
-              <li key={x} className="flex items-center gap-2 rounded-xl border border-line px-3 py-2.5 text-muted">
+              <li key={x} className="flex items-center gap-2 border-b border-line px-3 py-2.5 text-muted odd:border-r">
                 <span className="font-mono text-accent">✓</span> {x}
               </li>
             ))}

@@ -51,13 +51,13 @@ test("playground: controls update preview, code and the share URL round-trips", 
   await page.goto("/playground?effect=wave-text");
   await expect(page.getByRole("combobox").first()).toHaveValue("wave-text");
   await page.getByLabel("Text", { exact: true }).fill("Hello waves");
-  await page.getByRole("radio", { name: /JetBrains Mono/ }).click();
+  await page.getByRole("radio", { name: /Geist Mono/ }).click();
   const amp = page.getByRole("slider", { name: "Amplitude" });
   await amp.focus();
   for (let i = 0; i < 10; i++) await page.keyboard.press("ArrowRight");
   await expect(page.locator("pre code").first()).toContainText('text="Hello waves"');
   await expect(page.locator("pre code").first()).toContainText("amplitude={0.28}");
-  await expect(page.locator("pre code").first()).toContainText("JetBrains Mono");
+  await expect(page.locator("pre code").first()).toContainText("Geist Mono");
   await page.waitForTimeout(400);
   const url = page.url();
   expect(url).toContain("effect=wave-text");

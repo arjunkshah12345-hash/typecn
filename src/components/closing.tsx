@@ -1,35 +1,40 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { MeshGradient } from "@/components/gradients/mesh-gradient";
-import { DitherText } from "@/components/dithercn/dither-text";
+import { effectBySlug, defaultProps } from "@/registry/effects";
+import { EffectRenderer, defaultTypography } from "./effect-renderer";
 
-/** hmm.css-style closing panel over a gradients.sh mesh, with a dithercn headline. */
+const meta = effectBySlug["blur-resolve"];
+
+/** Colophon-style close: one last line set in a real effect, then the two ways in. */
 export function Closing() {
   return (
-    <section aria-labelledby="closing-title" className="container-x pt-8 pb-16">
-      <div className="relative isolate flex min-h-[520px] flex-col items-center justify-center overflow-hidden rounded-[32px] border border-line px-6 py-20 text-center">
-        <MeshGradient
-          aria-hidden
-          className="!absolute inset-0 -z-10 opacity-60"
-          colors={["#ff5b24", "#8f9bff", "#ffb38a", "#2a1c5a"]}
-          background="var(--bg)"
-          speed={0.45}
-          grain={0.25}
-          blur={0.8}
+    <section aria-labelledby="closing-title" className="container-x pt-8 pb-24 sm:pb-32">
+      <div className="label flex items-center justify-between gap-4 border-b border-line-strong pb-3 text-muted">
+        <span>
+          <span className="mr-3 text-faint">§ 05</span>Colophon
+        </span>
+        <span className="hidden sm:inline">Free · Open source · MIT</span>
+      </div>
+      <h2 id="closing-title" className="sr-only">
+        Make it move.
+      </h2>
+      <div className="py-[clamp(48px,8vw,120px)] text-center">
+        <EffectRenderer
+          meta={meta}
+          text="Make it move."
+          values={defaultProps(meta)}
+          typography={{ ...defaultTypography(meta), font: "serif", size: "clamp(64px, 11vw, 184px)", weight: 300, tracking: -0.045, leading: 0.95 }}
+          style={{ display: "block", fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
+          extra={{ as: "p", trigger: "inView", loop: false }}
         />
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-[5] bg-[radial-gradient(55%_55%_at_50%_50%,var(--bg)_0%,transparent_100%)] opacity-85" />
-        <p className="chip mb-6">Free · Open source · MIT</p>
-        <h2 id="closing-title" className="display text-[clamp(52px,9vw,140px)]">
-          <DitherText as="span" fill="gradient" color="ink" direction="down" from={1} to={0.35} bloom="low" className="block">
-            Make it move.
-          </DitherText>
-        </h2>
-        <p className="mt-6 max-w-[40ch] text-[17px] leading-relaxed text-muted">
+        <p className="mx-auto mt-8 max-w-[40ch] text-[17px] leading-relaxed text-pretty text-muted">
           Fifty effects, one playground, and the source for all of it. Pick one and ship it tonight.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-2">
           <Link href="/effects" className="btn btn-accent">
-            Browse effects <ArrowRight className="btn-arrow size-4" />
+            Browse effects <ArrowRight className="btn-arrow size-4" strokeWidth={1.75} />
           </Link>
           <Link href="/docs" className="btn">
             Read the docs

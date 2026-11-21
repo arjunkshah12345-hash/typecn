@@ -55,25 +55,30 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
   return (
     <article>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <header className="container-x grid gap-6 pt-[104px] pb-8 md:grid-cols-12 md:items-end md:pb-10">
-        <div className="md:col-span-8">
-          <nav aria-label="Breadcrumb" className="label mb-5 flex flex-wrap gap-2 text-muted">
+      <header className="container-x pt-[108px] sm:pt-[124px]">
+        <nav aria-label="Breadcrumb" className="label flex flex-wrap items-center justify-between gap-2 border-b border-line-strong pb-3 text-muted">
+          <span className="flex flex-wrap gap-2">
             <Link href="/effects" className="ulink hover:text-fg">
-              Effects
+              The catalogue
             </Link>
             <span aria-hidden>/</span>
             <Link href={`/effects?category=${cat.id}`} className="ulink hover:text-fg">
-              {cat.letter} · {cat.name}
+              {cat.letter} — {cat.name}
             </Link>
-          </nav>
-          <h1 className="display flex items-baseline gap-4 text-[clamp(44px,6.5vw,96px)]">
-            <span className="font-mono text-[13px] tracking-normal text-accent">{String(meta.number).padStart(2, "0")}</span>
+          </span>
+          <span className="tabular-nums">
+            N° {String(meta.number).padStart(2, "0")} of {effects.length}
+          </span>
+        </nav>
+        <div className="grid gap-6 py-[clamp(28px,4vw,56px)] md:grid-cols-12 md:items-end">
+          <h1 className="display text-[clamp(48px,7vw,112px)] md:col-span-7">
             {meta.name}
+            <span className="text-accent">.</span>
           </h1>
-        </div>
-        <div className="md:col-span-4">
-          <p className="text-[20px] leading-snug tracking-[-0.01em]">{meta.tagline}</p>
-          <p className="mt-3 text-[15px] leading-relaxed text-muted">{meta.description}</p>
+          <div className="md:col-span-5 md:pb-2">
+            <p className="italic-serif text-[24px] leading-snug">{meta.tagline}</p>
+            <p className="mt-3 text-[15.5px] leading-relaxed text-pretty text-muted">{meta.description}</p>
+          </div>
         </div>
       </header>
 
@@ -92,7 +97,7 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
         <div className="min-w-0 space-y-16 lg:col-span-9">
           <DocSection id="about" title="About">
             <p className="max-w-[62ch] text-[17px] leading-relaxed text-muted">{meta.description}</p>
-            <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line text-[14px] sm:grid-cols-4">
+            <dl className="mt-6 grid grid-cols-2 gap-px overflow-hidden border border-line bg-line text-[14px] sm:grid-cols-4">
               {[
                 ["Component", meta.component],
                 ["Category", cat.name],
@@ -152,16 +157,16 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
         </div>
       </div>
 
-      <nav aria-label="More effects" className="container-x grid gap-3 pb-10 md:grid-cols-2">
+      <nav aria-label="More effects" className="container-x mb-16 grid border-t border-line-strong md:grid-cols-2">
         {[
           { e: prev, dir: "Previous" },
           { e: next, dir: "Next" },
         ].map(({ e, dir }) => (
-          <Link key={dir} href={`/effects/${e.slug}`} className={`group block rounded-[22px] border border-line bg-panel px-6 py-10 transition-colors hover:border-line-strong ${dir === "Next" ? "md:text-right" : ""}`}>
+          <Link key={dir} href={`/effects/${e.slug}`} className={`group block border-b border-line px-1 py-10 transition-colors hover:bg-bg-2 md:px-6 ${dir === "Next" ? "md:border-l md:text-right" : ""}`}>
             <span className="label text-muted">
-              {dir} · Nº {String(e.number).padStart(2, "0")}
+              {dir} · N° {String(e.number).padStart(2, "0")}
             </span>
-            <span className="display mt-2 block text-[clamp(30px,3.6vw,48px)] transition-colors group-hover:text-accent">
+            <span className="italic-serif mt-2 block text-[clamp(30px,3.6vw,48px)] leading-tight transition-colors group-hover:text-accent">
               {e.name}
             </span>
           </Link>
@@ -174,7 +179,7 @@ export default async function EffectPage({ params }: { params: Promise<{ slug: s
 function DocSection({ id, title, children }: { id: string; title: string; children: React.ReactNode }) {
   return (
     <section id={id} className="scroll-mt-24">
-      <h2 className="mb-5 flex items-baseline gap-3 border-b border-line pb-3 text-[24px] font-medium leading-none tracking-[-0.03em]">{title}</h2>
+      <h2 className="mb-5 border-b border-line pb-3 font-serif text-[30px] leading-none font-light tracking-[-0.025em]">{title}</h2>
       {children}
     </section>
   );

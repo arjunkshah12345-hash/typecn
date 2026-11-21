@@ -8,8 +8,8 @@ import { categories, type EffectMeta } from "@/registry/types";
 import { defaultProps } from "@/registry/effects";
 import { EffectRenderer, defaultTypography } from "./effect-renderer";
 
-/** A live effect in a rounded catalogue card with a name/category footer bar (dithercn-style). */
-export function EffectCard({ meta, index, size, className = "" }: { meta: EffectMeta; index: number; size?: number; className?: string }) {
+/** A live effect on a specimen plate: catalogue number, the effect, and its name set in italic. */
+export function EffectCard({ meta, size, className = "" }: { meta: EffectMeta; index?: number; size?: number; className?: string }) {
   const [replay, setReplay] = useState(0);
   const [progress, setProgress] = useState(0.5);
   const cardRef = useRef<HTMLElement>(null);
@@ -29,27 +29,25 @@ export function EffectCard({ meta, index, size, className = "" }: { meta: Effect
   return (
     <article
       ref={cardRef}
-      className={`group relative flex min-h-[320px] flex-col overflow-hidden rounded-[22px] border border-line bg-panel transition-[border-color,transform] duration-500 ease-[var(--ease-out-expo)] hover:border-line-strong ${wide && !className ? "md:col-span-2" : ""} ${className}`}
-      style={{ animationDelay: `${index * 30}ms` }}
+      className={`group relative flex min-h-[340px] flex-col overflow-hidden border-r border-b border-line bg-bg transition-colors duration-500 hover:bg-bg-2 ${wide && !className ? "md:col-span-2" : ""} ${className}`}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_0%,color-mix(in_oklch,var(--fg)_4%,transparent),transparent_60%)]" aria-hidden />
-      <header className="relative z-20 flex items-center justify-between gap-3 p-3.5">
-        <span className="font-mono text-[11px] tabular-nums text-faint">{String(meta.number).padStart(2, "0")}</span>
-        <div className="flex items-center gap-1">
-          {meta.hint && wide ? <span className="chip opacity-0 transition-opacity duration-300 group-hover:opacity-100">{meta.hint}</span> : null}
+      <header className="relative z-20 flex items-center justify-between gap-3 px-5 pt-4">
+        <span className="font-mono text-[11px] tracking-[0.06em] tabular-nums text-faint">N° {String(meta.number).padStart(2, "0")}</span>
+        <div className="flex items-center gap-2">
+          {meta.hint ? <span className="label text-faint opacity-0 transition-opacity duration-300 group-hover:opacity-100">{meta.hint}</span> : null}
           <button
             type="button"
             onClick={() => setReplay((r) => r + 1)}
-            className="grid size-7 place-items-center rounded-full border border-transparent text-faint opacity-0 transition hover:border-line hover:bg-panel-2 hover:text-fg focus-visible:opacity-100 group-hover:opacity-100"
+            className="grid size-7 place-items-center rounded-full text-faint opacity-0 transition hover:text-fg focus-visible:opacity-100 group-hover:opacity-100"
             aria-label={`Replay ${meta.name}`}
             title="Replay"
           >
-            <RotateCcw className="size-3.5" />
+            <RotateCcw className="size-3.5" strokeWidth={1.75} />
           </button>
         </div>
       </header>
 
-      <div className={`relative flex flex-1 items-center px-5 sm:px-7 ${interactive ? "z-10" : ""} ${sticky ? "h-[240px]" : ""} ${wide ? "justify-start" : "justify-center text-center"}`}>
+      <div className={`relative flex flex-1 items-center px-6 py-8 sm:px-8 ${interactive ? "z-10" : ""} ${sticky ? "h-[240px]" : ""} ${wide ? "justify-start" : "justify-center text-center"}`}>
         <div className={`w-full ${sticky ? "h-[220px]" : ""} ${meta.slug === "text-trail" ? "self-stretch" : ""}`}>
           <EffectRenderer
             key={replay}
@@ -64,18 +62,18 @@ export function EffectCard({ meta, index, size, className = "" }: { meta: Effect
         </div>
       </div>
 
-      <footer className="relative z-20 mt-4 flex items-center justify-between gap-4 border-t border-line bg-bg/40 px-4 py-3">
+      <footer className="relative z-20 flex items-end justify-between gap-4 px-5 pb-4">
         <div className="min-w-0">
-          <h3 className="truncate text-[15px] font-medium tracking-[-0.01em]">{meta.name}</h3>
-          <p className="truncate text-[12.5px] text-faint">{meta.tagline}</p>
+          <h3 className="italic-serif truncate text-[21px] leading-tight">{meta.name}</h3>
+          <p className="truncate text-[12.5px] text-muted">{meta.tagline}</p>
         </div>
-        <span className="flex shrink-0 items-center gap-1.5 text-[12.5px] text-muted">
-          <span className="transition-opacity duration-300 group-hover:opacity-0">{cat.name.split(" ")[0]}</span>
-          <ArrowUpRight className="absolute right-4 size-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" />
+        <span className="relative flex shrink-0 items-center pb-0.5">
+          <span className="label text-faint transition-opacity duration-300 group-hover:opacity-0">{cat.name.split(" ")[0]}</span>
+          <ArrowUpRight className="absolute right-0 size-4 -translate-x-1 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100" strokeWidth={1.5} />
         </span>
       </footer>
 
-      <Link href={`/effects/${meta.slug}`} className="absolute inset-0 z-[5] rounded-[22px]" aria-label={`Open ${meta.name} in the playground`}>
+      <Link href={`/effects/${meta.slug}`} className="absolute inset-0 z-[5]" aria-label={`Open ${meta.name} in the playground`}>
         <span className="sr-only">Open {meta.name}</span>
       </Link>
     </article>

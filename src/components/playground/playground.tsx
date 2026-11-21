@@ -14,11 +14,11 @@ import { ColorInput, ControlInput, Range } from "./controls";
 import { CodePanel } from "./code-panel";
 
 const presets = [
-  { name: "Ink", bg: "#0b0b0d", fg: "#f4f4f5" },
-  { name: "Paper", bg: "#f4f4f5", fg: "#12110f" },
-  { name: "Signal", bg: "#ff5a1f", fg: "#120a06" },
-  { name: "Bone", bg: "#d8cfbf", fg: "#12110f" },
-  { name: "White", bg: "#ffffff", fg: "#111111" },
+  { name: "Paper", bg: "#f2eee6", fg: "#171512" },
+  { name: "Ink", bg: "#171512", fg: "#f2eee6" },
+  { name: "Signal", bg: "#df4a1f", fg: "#fff8f2" },
+  { name: "Bone", bg: "#e7e1d5", fg: "#171512" },
+  { name: "White", bg: "#ffffff", fg: "#171512" },
 ];
 
 const modes = [
@@ -204,8 +204,8 @@ export function Playground({ slug: initialSlug, mode = "effect" }: { slug: strin
   const sticky = meta.slug === "sticky-typography";
 
   return (
-    <div className="px-2 sm:px-3" data-playground>
-    <div className="overflow-hidden rounded-[24px] border border-line bg-panel sm:rounded-[28px]">
+    <div className="container-x" data-playground>
+    <div className="overflow-hidden border border-line-strong bg-bg">
       <div className="grid lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_380px]">
         {/* ------------------------------ Stage ------------------------------ */}
         <div className="relative flex min-w-0 flex-col bg-bg-2 lg:h-[calc(100svh-110px)] lg:min-h-[620px] [&:fullscreen]:h-screen">
@@ -221,7 +221,7 @@ export function Playground({ slug: initialSlug, mode = "effect" }: { slug: strin
                     <select
                       value={meta.slug}
                       onChange={(e) => switchEffect(e.target.value)}
-                      className="h-8 max-w-[200px] cursor-pointer appearance-none truncate bg-transparent pr-5 pl-1 text-[16px] font-medium tracking-[-0.01em] outline-none focus-visible:text-accent"
+                      className="h-8 max-w-[220px] cursor-pointer appearance-none truncate bg-transparent pr-5 pl-1 font-serif text-[19px] italic tracking-[-0.01em] outline-none focus-visible:text-accent"
                     >
                       {categories.map((c) => (
                         <optgroup key={c.id} label={`${c.letter} · ${c.name}`} className="bg-bg">
@@ -245,7 +245,7 @@ export function Playground({ slug: initialSlug, mode = "effect" }: { slug: strin
                 </div>
               ) : (
                 <span className="label text-muted">
-                  Nº {String(meta.number).padStart(2, "0")} · {cat.name}
+                  N° {String(meta.number).padStart(2, "0")} · {cat.name}
                 </span>
               )}
               <span className="label flex items-center gap-1.5 text-muted" aria-live="polite">
@@ -342,7 +342,7 @@ export function Playground({ slug: initialSlug, mode = "effect" }: { slug: strin
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 8 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute right-3 bottom-3 z-20 w-64 rounded-2xl border border-line-strong bg-bg-2 p-4 shadow-2xl"
+                  className="absolute right-3 bottom-3 z-20 w-64 border border-line-strong bg-bg p-4 shadow-[0_20px_60px_-30px_rgb(0_0_0/0.35)]"
                   role="dialog"
                   aria-label="Keyboard shortcuts"
                 >

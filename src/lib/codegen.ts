@@ -13,8 +13,8 @@ export interface PlaygroundState {
   values: Record<string, ControlValue>;
 }
 
-export const DEFAULT_COLOR = "#f4f4f5";
-export const DEFAULT_BG = "#0b0b0d";
+export const DEFAULT_COLOR = "#171512";
+export const DEFAULT_BG = "#f2eee6";
 
 export function initialState(meta: EffectMeta): PlaygroundState {
   return {
@@ -32,16 +32,16 @@ export function initialState(meta: EffectMeta): PlaygroundState {
 
 const fontStack: Record<FontKey, string> = {
   serif: `"Fraunces", serif`,
-  grotesk: `"Bricolage Grotesque", sans-serif`,
-  wide: `"Anybody", sans-serif`,
-  mono: `"JetBrains Mono", monospace`,
+  grotesk: `"Geist", sans-serif`,
+  wide: `"Roboto Flex", sans-serif`,
+  mono: `"Geist Mono", monospace`,
 };
 
 const googleCss: Record<FontKey, string> = {
   serif: "Fraunces:opsz,wght,SOFT,WONK@9..144,100..900,0..100,0..1",
-  grotesk: "Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800",
-  wide: "Anybody:wdth,wght@50..150,100..900",
-  mono: "JetBrains+Mono:wght@100..800",
+  grotesk: "Geist:wght@100..900",
+  wide: "Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000",
+  mono: "Geist+Mono:wght@100..900",
 };
 
 function isDefaultForLib(c: Control, v: ControlValue) {

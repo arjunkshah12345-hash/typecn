@@ -5,8 +5,9 @@ import { useState } from "react";
 import { effects, defaultProps } from "@/registry/effects";
 import { categories, type CategoryId } from "@/registry/types";
 import { EffectRenderer, defaultTypography } from "../effect-renderer";
+import { SectionHead } from "./section-head";
 
-/** asciicn-style terminal browser: bracket tabs, a box-drawn file tree, and a live preview of the hovered file. */
+/** A terminal-style file browser: bracket tabs, a box-drawn file tree, and a live preview of the hovered file. */
 export function LibraryTree() {
   const [cat, setCat] = useState<CategoryId>(categories[0].id);
   const files = effects.filter((e) => e.category === cat);
@@ -16,26 +17,26 @@ export function LibraryTree() {
 
   return (
     <section className="container-x py-20 sm:py-28" aria-labelledby="tree-title">
-      <div className="mb-10 grid gap-6 md:grid-cols-2 md:items-end">
-        <h2 id="tree-title" className="display text-[clamp(44px,6.5vw,88px)]">
-          Five families.
-          <br />
-          <span className="text-muted">Two files each.</span>
-        </h2>
-        <p className="max-w-[46ch] text-[17px] leading-relaxed text-muted md:justify-self-end">
-          Every effect is one file plus a shared <code className="rounded bg-panel-2 px-1.5 py-0.5 font-mono text-[14px] text-fg">core.tsx</code>. The shadcn CLI copies both into your app — no runtime package, nothing hidden.
+      <SectionHead
+        id="tree-title"
+        n="03"
+        kicker="The files"
+        aside="Five families"
+        title={
+          <>
+            One file <em>per</em> effect.
+          </>
+        }
+      >
+        <p className="max-w-[44ch]">
+          Every effect is one file plus a shared <code className="font-mono text-[14px] text-fg">core.tsx</code>. The shadcn CLI copies both into your app, with no runtime package to keep in sync.
         </p>
-      </div>
+      </SectionHead>
 
-      <div className="overflow-hidden rounded-[28px] border border-line bg-panel">
-        {/* terminal title bar */}
-        <div className="flex items-center gap-3 border-b border-line px-4 py-3">
-          <span className="flex gap-1.5" aria-hidden>
-            <span className="size-2.5 rounded-full bg-line-strong" />
-            <span className="size-2.5 rounded-full bg-line-strong" />
-            <span className="size-2.5 rounded-full bg-line-strong" />
-          </span>
+      <div className="border border-line">
+        <div className="flex items-center justify-between gap-3 border-b border-line px-5 py-3">
           <span className="font-mono text-[12px] text-faint">~/your-app/components/typecn</span>
+          <span className="label hidden text-faint sm:inline">{info.letter} — {info.name}</span>
         </div>
 
         {/* bracket tabs */}
@@ -52,7 +53,7 @@ export function LibraryTree() {
                   setCat(c.id);
                   setSlug(effects.find((e) => e.category === c.id)!.slug);
                 }}
-                className={`shrink-0 rounded-md px-2 py-1 whitespace-nowrap transition-colors ${on ? "bg-accent/12 text-accent" : "text-muted hover:text-fg"}`}
+                className={`shrink-0 px-2 py-1 whitespace-nowrap transition-colors ${on ? "text-accent" : "text-muted hover:text-fg"}`}
               >
                 [{on ? "■" : " "}] {c.name.split(" ")[0].toLowerCase()}
               </button>
@@ -101,7 +102,7 @@ export function LibraryTree() {
               <span className="font-mono text-faint">
                 preview <span className="text-muted">{current.file}.tsx</span>
               </span>
-              <Link href={`/effects/${current.slug}`} className="text-muted hover:text-accent">
+              <Link href={`/effects/${current.slug}`} className="ulink text-muted hover:text-fg">
                 Open in playground →
               </Link>
             </div>
@@ -117,7 +118,7 @@ export function LibraryTree() {
               />
             </div>
             <p className="border-t border-line px-5 py-3 text-[13.5px] text-muted">
-              <span className="text-fg">{current.name}</span> — {current.tagline}
+              <span className="italic-serif text-[17px] text-fg">{current.name}</span> — {current.tagline}
             </p>
           </div>
         </div>
