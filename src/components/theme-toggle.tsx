@@ -25,16 +25,16 @@ export function setTheme(next: Theme) {
 export function useTheme() {
   return useSyncExternalStore<Theme>(
     subscribe,
-    () => (document.documentElement.dataset.theme as Theme) ?? "dark",
-    () => "dark",
+    () => (document.documentElement.dataset.theme as Theme) ?? "light",
+    () => "light",
   );
 }
 
-/** Segmented sun/moon switch (hmm.css / ditherkit style). */
+/** Segmented sun/moon switch. */
 export function ThemeToggle() {
   const theme = useTheme();
   return (
-    <div className="flex items-center rounded-full border border-line bg-panel p-0.5" role="group" aria-label="Theme">
+    <div className="flex items-center rounded-full border border-line-strong p-0.5" role="group" aria-label="Theme">
       {(["light", "dark"] as const).map((t) => {
         const Icon = t === "light" ? Sun : Moon;
         const on = theme === t;
@@ -46,7 +46,7 @@ export function ThemeToggle() {
             aria-pressed={on}
             aria-label={`${t === "light" ? "Light" : "Dark"} theme`}
             title={`${t === "light" ? "Light" : "Dark"} theme (T)`}
-            className={`grid size-7 place-items-center rounded-full transition-colors ${on ? "bg-panel-2 text-fg shadow-[inset_0_0_0_1px_var(--line-strong)]" : "text-faint hover:text-fg"}`}
+            className={`grid size-6 place-items-center rounded-full transition-colors ${on ? "bg-fg text-bg" : "text-faint hover:text-fg"}`}
           >
             <Icon className="size-3.5" strokeWidth={1.75} />
           </button>
@@ -56,4 +56,4 @@ export function ThemeToggle() {
   );
 }
 
-export const themeScript = `(function(){var d=document.documentElement,t="dark";try{t=localStorage.getItem("typecn-theme");if(t!=="light"&&t!=="dark"){t="dark"}}catch(e){}d.dataset.theme=t;d.classList.add(t)})();`;
+export const themeScript = `(function(){var d=document.documentElement,t="light";try{t=localStorage.getItem("typecn-theme");if(t!=="light"&&t!=="dark"){t="light"}}catch(e){}d.dataset.theme=t;d.classList.add(t)})();`;

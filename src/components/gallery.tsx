@@ -8,7 +8,7 @@ import { categories, type CategoryId } from "@/registry/types";
 import { EffectCard } from "./effect-card";
 
 const sorts = [
-  { id: "number", label: "Catalogue Nº" },
+  { id: "number", label: "Catalogue N°" },
   { id: "name", label: "A — Z" },
   { id: "interactive", label: "Interactive first" },
   { id: "category", label: "By category" },
@@ -53,8 +53,8 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
 
   return (
     <div>
-      <div className="sticky top-[76px] z-30 mb-5">
-        <div className="flex flex-col gap-2 rounded-[22px] border border-line bg-glass p-1.5 shadow-[0_10px_40px_-20px_rgb(0_0_0/0.5)] backdrop-blur-xl xl:flex-row xl:items-center xl:rounded-full">
+      <div className="sticky top-[60px] z-30 mb-6 bg-glass backdrop-blur-md">
+        <div className="flex flex-col gap-2 border-y border-line py-2 xl:flex-row xl:items-center">
           <div className="no-scrollbar flex min-w-0 flex-1 items-center gap-0.5 overflow-x-auto" role="tablist" aria-label="Filter by category">
             <FilterChip active={cat === "all"} onClick={() => setCat("all")} count={effects.length}>
               All
@@ -66,7 +66,7 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
             ))}
           </div>
           <div className="flex items-center gap-1.5">
-            <label className="group relative flex h-9 flex-1 items-center gap-2 rounded-full border border-line bg-panel px-3 transition-colors focus-within:border-line-strong xl:w-64 xl:flex-none">
+            <label className="group relative flex h-9 flex-1 items-center gap-2 rounded-full border border-line-strong px-3 transition-colors focus-within:border-line-strong xl:w-64 xl:flex-none">
               <Search className="size-3.5 text-faint" aria-hidden />
               <span className="sr-only">Search effects</span>
               <input
@@ -90,7 +90,7 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
               <select
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortId)}
-                className="h-9 cursor-pointer appearance-none rounded-full border border-line bg-panel pr-8 pl-3.5 text-sm outline-none focus-visible:border-line-strong"
+                className="h-9 cursor-pointer appearance-none rounded-full border border-line-strong bg-transparent pr-8 pl-3.5 text-sm outline-none focus-visible:border-line-strong"
               >
                 {sorts.map((s) => (
                   <option key={s.id} value={s.id} className="bg-bg text-fg">
@@ -112,9 +112,9 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
       </p>
 
       <LayoutGroup>
-        <motion.div layout className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <motion.div layout className="grid grid-cols-1 border-t border-l border-line md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <AnimatePresence mode="popLayout" initial={false}>
-            {list.map((e, i) => (
+            {list.map((e) => (
               <motion.div
                 key={e.slug}
                 layout="position"
@@ -125,7 +125,7 @@ export function Gallery({ initialCategory }: { initialCategory?: CategoryId }) {
                 className={`flex ${e.card.span === 2 ? "md:col-span-2" : ""}`}
               >
                 <div className="flex w-full [&>article]:w-full">
-                  <EffectCard meta={e} index={i} />
+                  <EffectCard meta={e} />
                 </div>
               </motion.div>
             ))}
@@ -146,11 +146,11 @@ function FilterChip({ active, onClick, count, children, title }: { active: boole
       aria-selected={active}
       onClick={onClick}
       title={title}
-      className={`relative flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm whitespace-nowrap transition-colors ${active ? "text-fg" : "text-muted hover:text-fg"}`}
+      className={`relative flex h-9 shrink-0 items-center gap-1.5 rounded-full px-3.5 text-sm whitespace-nowrap transition-colors ${active ? "text-bg" : "text-muted hover:text-fg"}`}
     >
-      {active ? <motion.span layoutId="chip" className="absolute inset-0 rounded-full border border-line-strong bg-panel-2" transition={{ type: "spring", stiffness: 500, damping: 40 }} /> : null}
+      {active ? <motion.span layoutId="chip" className="absolute inset-0 rounded-full bg-fg" transition={{ type: "spring", stiffness: 500, damping: 40 }} /> : null}
       <span className="relative">{children}</span>
-      <span className="relative font-mono text-[10.5px] tabular-nums text-faint">{count}</span>
+      <span className={`relative font-mono text-[10.5px] tabular-nums ${active ? "opacity-60" : "text-faint"}`}>{count}</span>
     </button>
   );
 }

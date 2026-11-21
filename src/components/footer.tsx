@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { site } from "@/lib/site";
 import { Wordmark } from "./wordmark";
-import { DitherWordmark } from "./dither-wordmark";
 
 const cols: { title: string; links: [string, string][] }[] = [
   { title: "Library", links: [["Effects", "/effects"], ["Playground", "/playground"], ["Getting started", "/docs"], ["Installation", "/docs/installation"]] },
@@ -20,48 +19,40 @@ const cols: { title: string; links: [string, string][] }[] = [
 
 export function Footer() {
   return (
-    <footer className="px-2 pb-2 sm:px-3 sm:pb-3">
-      <div className="overflow-hidden rounded-[28px] border border-line bg-panel sm:rounded-[36px]">
-        <div className="grid gap-10 px-6 pt-12 pb-4 sm:px-10 lg:grid-cols-[1fr_2fr]">
-          <div>
-            <Link href="/" className="text-[20px]" aria-label="typecn home">
-              <Wordmark />
-            </Link>
-            <p className="mt-4 max-w-[30ch] text-[15px] leading-relaxed text-muted">Fifty ways for words to move. Free, open source, and yours to bend.</p>
-          </div>
-          <div className="grid grid-cols-2 gap-8 text-[14px] sm:grid-cols-4">
-            {cols.map((c) => (
-              <div key={c.title}>
-                <p className="mb-3 text-[13px] text-faint">{c.title}</p>
-                <ul className="space-y-2">
-                  {c.links.map(([l, h]) => (
-                    <li key={l}>
-                      {h.startsWith("http") ? (
-                        <a href={h} target="_blank" rel="noreferrer" className="text-muted transition-colors hover:text-fg">
-                          {l} <span className="text-faint">↗</span>
-                        </a>
-                      ) : (
-                        <Link href={h} className="text-muted transition-colors hover:text-fg">
-                          {l}
-                        </Link>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+    <footer className="container-x">
+      <div className="grid gap-10 border-t border-line-strong pt-10 pb-8 lg:grid-cols-[1fr_2fr]">
+        <p className="max-w-[30ch] text-[15px] leading-relaxed text-muted">Fifty ways for words to move. Free, open source, and yours to bend.</p>
+        <div className="grid grid-cols-2 gap-8 text-[14px] sm:grid-cols-4">
+          {cols.map((c) => (
+            <div key={c.title}>
+              <p className="label mb-3 text-faint">{c.title}</p>
+              <ul className="space-y-2">
+                {c.links.map(([l, h]) => (
+                  <li key={l}>
+                    {h.startsWith("http") ? (
+                      <a href={h} target="_blank" rel="noreferrer" className="text-muted transition-colors hover:text-fg">
+                        {l} <span className="text-faint">↗</span>
+                      </a>
+                    ) : (
+                      <Link href={h} className="text-muted transition-colors hover:text-fg">
+                        {l}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* ditherkit: Atkinson-dithered wordmark lit by a moving light */}
-        <div className="px-4 pt-6 sm:px-8">
-          <DitherWordmark className="h-[clamp(90px,19vw,300px)]" cell={5} />
-        </div>
+      <Link href="/" aria-label="typecn home" className="block overflow-hidden border-t border-line pt-4 leading-none">
+        <Wordmark className="text-[clamp(96px,24vw,400px)] tracking-[-0.05em]" />
+      </Link>
 
-        <div className="flex flex-col gap-2 border-t border-line px-6 py-5 text-[12.5px] text-faint sm:flex-row sm:justify-between sm:px-10">
-          <span>© {new Date().getFullYear()} typecn contributors · MIT License</span>
-          <span>Wordmark dithered live with ditherkit&apos;s Atkinson kernel. Move your pointer over it.</span>
-        </div>
+      <div className="flex flex-col gap-2 border-t border-line py-5 text-[12.5px] text-faint sm:flex-row sm:justify-between">
+        <span>© {new Date().getFullYear()} typecn contributors · MIT License</span>
+        <span>Set in Fraunces and Geist.</span>
       </div>
     </footer>
   );

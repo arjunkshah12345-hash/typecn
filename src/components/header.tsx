@@ -24,7 +24,7 @@ export function GithubIcon({ className }: { className?: string }) {
   );
 }
 
-/** Floating pill navigation (dithercn-style) with a ⌘K search trigger. */
+/** Full-width masthead with a hairline rule and a ⌘K search trigger. */
 export function Header() {
   const pathname = usePathname() ?? "/";
   const [open, setOpen] = useState(false);
@@ -57,19 +57,17 @@ export function Header() {
       <a href="#main" className="sr-only z-[80] rounded-full bg-accent px-3 py-2 text-ink focus:not-sr-only focus:fixed focus:top-2 focus:left-2">
         Skip to content
       </a>
-      <header className="pointer-events-none fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
+      <header className="fixed inset-x-0 top-0 z-50">
         <div
-          className={`pointer-events-auto mx-auto flex h-[52px] max-w-[880px] items-center gap-2 rounded-full border pr-1.5 pl-4 transition-[background-color,border-color,box-shadow] duration-500 ${
-            scrolled || open
-              ? "border-line-strong bg-glass shadow-[0_10px_40px_-12px_rgb(0_0_0/0.45)] backdrop-blur-xl"
-              : "border-line bg-glass/60 backdrop-blur-md"
+          className={`container-x flex h-[60px] items-center gap-6 border-b transition-[background-color,border-color] duration-500 ${
+            scrolled || open ? "border-line bg-glass backdrop-blur-md" : "border-transparent bg-transparent"
           }`}
         >
-          <Link href="/" className="relative z-10 mr-2 text-[17px]" aria-label="typecn home">
+          <Link href="/" className="relative z-10 text-[24px]" aria-label="typecn home">
             <Wordmark />
           </Link>
 
-          <nav className="hidden items-center md:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Primary">
             {nav.map((n) => {
               const active = n.match(pathname);
               return (
@@ -77,34 +75,33 @@ export function Header() {
                   key={n.href}
                   href={n.href}
                   aria-current={active ? "page" : undefined}
-                  className={`relative rounded-full px-3 py-1.5 text-[14px] transition-colors ${active ? "text-fg" : "text-muted hover:text-fg"}`}
+                  className={`relative px-2.5 py-1.5 text-[14px] transition-colors ${active ? "text-fg" : "text-muted hover:text-fg"}`}
                 >
-                  {active ? <motion.span layoutId="nav-pill" className="absolute inset-0 rounded-full bg-panel-2" transition={{ type: "spring", stiffness: 500, damping: 40 }} /> : null}
                   <span className="relative">{n.label}</span>
+                  {active ? <motion.span layoutId="nav-rule" className="absolute inset-x-2.5 -bottom-[1px] h-px bg-fg" transition={{ type: "spring", stiffness: 500, damping: 40 }} /> : null}
                 </Link>
               );
             })}
           </nav>
 
-          <div className="ml-auto flex items-center gap-1.5">
+          <div className="ml-auto flex items-center gap-1">
             <button
               type="button"
               onClick={openCommandMenu}
-              className="flex h-9 items-center gap-2 rounded-full border border-line bg-panel pr-1.5 pl-3 text-[13.5px] text-muted transition-colors hover:border-line-strong hover:text-fg"
+              className="flex h-8 items-center gap-2 rounded-full border border-line-strong pr-1.5 pl-3 text-[13px] text-muted transition-colors hover:border-fg hover:text-fg"
               aria-label="Search effects (⌘K)"
             >
-              <Search className="size-3.5" strokeWidth={2} />
+              <Search className="size-3.5" strokeWidth={1.75} />
               <span className="hidden sm:inline">Search</span>
               <span className="hidden items-center gap-0.5 sm:flex">
-                <span className="kbd">⌘</span>
-                <span className="kbd">K</span>
+                <span className="kbd !h-[18px] !min-w-[18px]">⌘K</span>
               </span>
             </button>
             <a
               href={site.repo}
               target="_blank"
               rel="noreferrer"
-              className="hidden h-9 items-center gap-1.5 rounded-full px-2.5 text-[13px] text-muted transition-colors hover:text-fg sm:flex"
+              className="hidden h-8 items-center gap-1.5 px-2 text-[13px] text-muted transition-colors hover:text-fg sm:flex"
               aria-label="typecn on GitHub"
             >
               <GithubIcon className="size-[16px]" />
@@ -114,15 +111,15 @@ export function Header() {
             </div>
             <button
               type="button"
-              className="grid size-9 place-items-center rounded-full md:hidden"
+              className="grid size-9 place-items-center md:hidden"
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Close menu" : "Open menu"}
               onClick={() => setOpen((o) => !o)}
             >
               <span className="relative block h-2.5 w-4">
-                <span className={`absolute left-0 h-[1.5px] w-4 rounded bg-fg transition-all duration-300 ${open ? "top-[4px] rotate-45" : "top-0"}`} />
-                <span className={`absolute left-0 h-[1.5px] w-4 rounded bg-fg transition-all duration-300 ${open ? "top-[4px] -rotate-45" : "top-[9px]"}`} />
+                <span className={`absolute left-0 h-px w-4 bg-fg transition-all duration-300 ${open ? "top-[4px] rotate-45" : "top-0"}`} />
+                <span className={`absolute left-0 h-px w-4 bg-fg transition-all duration-300 ${open ? "top-[4px] -rotate-45" : "top-[9px]"}`} />
               </span>
             </button>
           </div>
@@ -132,7 +129,7 @@ export function Header() {
           {open ? (
             <motion.div
               id="mobile-menu"
-              className="pointer-events-auto mx-auto mt-2 max-w-[880px] overflow-hidden rounded-3xl border border-line-strong bg-bg-2 p-2 shadow-2xl md:hidden"
+              className="mx-3 mt-2 overflow-hidden rounded-xl border border-line-strong bg-bg p-2 shadow-[0_20px_60px_-30px_rgb(0_0_0/0.35)] md:hidden"
               initial={{ opacity: 0, y: -8, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -144,7 +141,7 @@ export function Header() {
                     <motion.li key={n.href} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 * i }}>
                       <Link
                         href={n.href}
-                        className={`flex items-center justify-between rounded-2xl px-4 py-3.5 text-[22px] tracking-[-0.03em] ${n.match(pathname) ? "bg-panel-2 text-fg" : "text-muted"}`}
+                        className={`flex items-center justify-between rounded-lg px-4 py-3.5 font-serif text-[26px] font-light tracking-[-0.02em] ${n.match(pathname) ? "bg-panel-2 text-fg" : "text-muted"}`}
                       >
                         {n.label}
                         <span className="label text-faint">0{i + 1}</span>

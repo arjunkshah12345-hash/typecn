@@ -19,9 +19,9 @@ export type FontKey = "serif" | "grotesk" | "wide" | "mono";
 
 export const fonts: Record<FontKey, { label: string; css: string; family: string; note: string }> = {
   serif: { label: "Fraunces", css: "var(--font-serif)", family: "Fraunces", note: "Variable serif · wght, opsz, SOFT, WONK" },
-  grotesk: { label: "Bricolage Grotesque", css: "var(--font-grotesk)", family: "Bricolage Grotesque", note: "Variable grotesque · wght, wdth, opsz" },
-  wide: { label: "Anybody", css: "var(--font-wide)", family: "Anybody", note: "Variable display · wght 100–900, wdth 50–150" },
-  mono: { label: "JetBrains Mono", css: "var(--font-code)", family: "JetBrains Mono", note: "Variable monospace · wght" },
+  grotesk: { label: "Geist", css: "var(--font-grotesk)", family: "Geist", note: "Variable grotesque · wght 100–900" },
+  wide: { label: "Roboto Flex", css: "var(--font-wide)", family: "Roboto Flex", note: "Variable sans · wght 100–1000, wdth 25–151, opsz" },
+  mono: { label: "Geist Mono", css: "var(--font-code)", family: "Geist Mono", note: "Variable monospace · wght 100–900" },
 };
 
 interface ControlBase {

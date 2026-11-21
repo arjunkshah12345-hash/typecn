@@ -90,7 +90,7 @@ npm install /absolute/path/to/typecn/packages/typecn/typecn-${site.version}.tgz`
       </P>
       <H>Fonts</H>
       <P>
-        Effects inherit whatever font you give them. Variable-axis effects (Breathing Type, Stretch Type, Proximity Weight, Variable Morph) need a variable font with the relevant axes. The site uses Fraunces, Bricolage Grotesque, Anybody and JetBrains Mono — all SIL Open Font License — and the CSS tab in the playground includes the matching Google Fonts import.
+        Effects inherit whatever font you give them. Variable-axis effects (Breathing Type, Stretch Type, Proximity Weight, Variable Morph) need a variable font with the relevant axes. The site uses Fraunces, Geist, Roboto Flex and Geist Mono — all SIL Open Font License — and the CSS tab in the playground includes the matching Google Fonts import.
       </P>
     </>
   ),

@@ -7,49 +7,50 @@
 /* ------------------------------------------------------------------------ */
 
 :root {
-  --ink: #050506;
-  --ink-2: #0d0d0f;
-  --ink-3: #18181b;
-  --paper: #f4f4f2;
-  --bone: #e4e4e0;
-  --stone: #8a8a93;
-  --accent: #ff5b24;
-  --accent-ink: #160803;
-  --accent-2: #8f9bff;
+  --ink: #171512;
+  --ink-2: #1f1d19;
+  --ink-3: #2a2723;
+  --paper: #f2eee6;
+  --bone: #e7e1d5;
+  --stone: #8c857a;
+  --accent: #df4a1f;
+  --accent-ink: #fff8f2;
+  --accent-2: #2f4ea8;
 
-  /* theme-dependent (dark default) */
-  --bg: #050506;
-  --bg-2: #0b0b0d;
-  --fg: #f4f4f5;
-  --muted: #9f9fa9;
-  --faint: #55555e;
-  --line: rgb(255 255 255 / 0.075);
-  --line-strong: rgb(255 255 255 / 0.15);
-  --panel: #0e0e10;
-  --panel-2: #151518;
-  --code-bg: #0a0a0c;
-  --glass: rgb(20 20 23 / 0.72);
-  color-scheme: dark;
+  /* theme-dependent (paper default) */
+  --bg: #f2eee6;
+  --bg-2: #ebe6dc;
+  --fg: #171512;
+  --muted: #6c655a;
+  --faint: #a59d90;
+  --line: rgb(23 21 18 / 0.11);
+  --line-strong: rgb(23 21 18 / 0.22);
+  --panel: #ece7de;
+  --panel-2: #e4ded2;
+  --code-bg: #e9e4da;
+  --glass: rgb(242 238 230 / 0.86);
+  color-scheme: light;
 
-  /* shadcn names used by the dithercn / gradients.sh registries */
   --background: var(--bg);
   --foreground: var(--fg);
   --primary: var(--accent);
 }
 
-[data-theme="light"] {
-  --bg: #fafaf9;
-  --bg-2: #f3f3f1;
-  --fg: #0b0b0c;
-  --muted: #5f5f68;
-  --faint: #a3a3ab;
-  --line: rgb(10 10 12 / 0.08);
-  --line-strong: rgb(10 10 12 / 0.16);
-  --panel: #f2f2f0;
-  --panel-2: #e9e9e6;
-  --code-bg: #f4f4f2;
-  --glass: rgb(255 255 255 / 0.78);
-  color-scheme: light;
+[data-theme="dark"] {
+  --bg: #12110f;
+  --bg-2: #181714;
+  --fg: #ede7dc;
+  --muted: #a0998d;
+  --faint: #635d54;
+  --line: rgb(237 231 220 / 0.09);
+  --line-strong: rgb(237 231 220 / 0.18);
+  --panel: #191815;
+  --panel-2: #22201c;
+  --code-bg: #161512;
+  --glass: rgb(18 17 15 / 0.85);
+  --accent: #f0612f;
+  --accent-ink: #160803;
+  color-scheme: dark;
 }
 
 @theme inline {
@@ -72,28 +73,19 @@
   --color-stone: var(--stone);
   --font-serif: var(--font-fraunces), "Times New Roman", serif;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-wide: var(--font-anybody), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), "Times New Roman", serif;
+  --font-wide: var(--font-flex), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
-  --color-dither-ink: var(--dither-ink);
-  --color-dither-paper: var(--dither-paper);
-  --color-dither-blue: var(--dither-color-blue);
-  --color-dither-purple: var(--dither-color-purple);
-  --color-dither-green: var(--dither-color-green);
-  --color-dither-pink: var(--dither-color-pink);
-  --color-dither-orange: var(--dither-color-orange);
-  --color-dither-red: var(--dither-color-red);
-  --color-dither-grey: var(--dither-color-grey);
 }
 
 /* Effect fonts used by the registry (inline style values). */
 :root {
   --font-serif: var(--font-fraunces), "Times New Roman", serif;
-  --font-grotesk: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-wide: var(--font-anybody), ui-sans-serif, system-ui, sans-serif;
-  --font-code: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-grotesk: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-wide: var(--font-flex), ui-sans-serif, system-ui, sans-serif;
+  --font-code: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 /* ------------------------------------------------------------------------ */
@@ -133,8 +125,9 @@ body {
 
 @utility label {
   font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 11.5px;
-  letter-spacing: 0.02em;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   font-weight: 450;
 }
 
@@ -164,71 +157,70 @@ body {
   background-position: 0% 100%;
 }
 
-/* Pill buttons */
+/* Buttons: one solid ink button, one hairline button. No glow. */
 .btn {
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  height: 42px;
-  padding: 0 1.05rem;
+  gap: 0.55rem;
+  height: 44px;
+  padding: 0 1.15rem;
   border-radius: 9999px;
   border: 1px solid var(--line-strong);
-  background: var(--panel);
+  background: transparent;
   font-size: 14.5px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  transition: background-color 250ms, border-color 250ms, transform 250ms var(--ease-out-expo), box-shadow 250ms;
+  font-weight: 450;
+  letter-spacing: -0.005em;
+  transition: background-color 300ms, border-color 300ms, color 300ms, transform 300ms var(--ease-out-expo);
 }
 .btn:hover,
 .btn:focus-visible {
-  border-color: color-mix(in oklch, var(--fg) 35%, transparent);
-  background: var(--panel-2);
+  border-color: var(--fg);
 }
 .btn:active {
-  transform: scale(0.97);
+  transform: scale(0.98);
 }
 .btn .btn-arrow {
-  transition: transform 400ms var(--ease-out-expo);
+  transition: transform 500ms var(--ease-out-expo);
 }
 .btn:hover .btn-arrow {
   transform: translateX(3px);
 }
 .btn-accent {
-  background: var(--accent);
-  border-color: transparent;
-  color: var(--accent-ink);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35), 0 8px 30px -10px color-mix(in oklch, var(--accent) 70%, transparent);
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
 }
 .btn-accent:hover,
 .btn-accent:focus-visible {
-  background: color-mix(in oklch, var(--accent) 88%, white);
-  border-color: transparent;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
 }
 .btn-sm {
   height: 34px;
-  padding: 0 0.8rem;
+  padding: 0 0.85rem;
   font-size: 13px;
 }
 
-/* Rounded surfaces (dithercn / hmm style) */
 .surface {
-  border-radius: 24px;
+  border-radius: 4px;
   border: 1px solid var(--line);
   background: var(--panel);
 }
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.45rem;
   height: 26px;
-  padding: 0 0.65rem;
+  padding: 0 0.7rem;
   border-radius: 9999px;
-  border: 1px solid var(--line);
-  background: var(--glass);
-  font-size: 12px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--muted);
-  backdrop-filter: blur(10px);
 }
 .kbd {
   display: inline-grid;
@@ -236,7 +228,7 @@ body {
   min-width: 20px;
   height: 20px;
   padding: 0 4px;
-  border-radius: 5px;
+  border-radius: 4px;
   border: 1px solid var(--line-strong);
   font-family: var(--font-geist-mono), monospace;
   font-size: 11px;
@@ -250,12 +242,25 @@ body {
   line-height: 1.55;
 }
 
-/* Section headline */
+/* Section headline: Fraunces at display optical size, light weight. */
 .display {
   font-family: var(--font-display);
-  font-weight: 560;
-  letter-spacing: -0.045em;
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 0;
+  letter-spacing: -0.035em;
   line-height: 0.95;
+}
+.display em,
+.italic-serif {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 300;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+}
+
+/* Specimen plate rules */
+.rule-t {
+  border-top: 1px solid var(--line-strong);
 }
 
 /* Range input */
@@ -314,24 +319,24 @@ input[type="range"].range:focus-visible::-webkit-slider-runnable-track {
   --sh-class: var(--accent);
   --sh-identifier: var(--fg);
   --sh-sign: var(--muted);
-  --sh-property: #d8b98a;
+  --sh-property: #7a5a2a;
+  --sh-entity: #9a3c17;
+  --sh-jsxliterals: #4f4a42;
+  --sh-string: #4a6127;
+  --sh-keyword: #b8401a;
+  --sh-comment: var(--faint);
+}
+[data-theme="dark"] .code {
+  --sh-property: #d6b98a;
   --sh-entity: #e9a77c;
   --sh-jsxliterals: #c7bfb2;
   --sh-string: #a8c08a;
-  --sh-keyword: #ff8a5c;
-  --sh-comment: var(--faint);
-}
-[data-theme="light"] .code {
-  --sh-property: #8a5a14;
-  --sh-entity: #a2400f;
-  --sh-jsxliterals: #4f4a42;
-  --sh-string: #4d6b22;
-  --sh-keyword: #c4380a;
+  --sh-keyword: #f08a5f;
 }
 
 /* Pulsing status dot */
 @keyframes pulse-dot {
-  0% { box-shadow: 0 0 0 0 rgb(255 90 31 / 0.55); }
+  0% { box-shadow: 0 0 0 0 rgb(223 74 31 / 0.45); }
   70% { box-shadow: 0 0 0 7px rgb(255 90 31 / 0); }
   100% { box-shadow: 0 0 0 0 rgb(255 90 31 / 0); }
 }
@@ -380,28 +385,3 @@ input[type="range"].range:focus-visible::-webkit-slider-runnable-track {
   scrollbar-color: var(--line-strong) transparent;
 }
 
-@layer base {
-  :root {
-    --dither-ink: var(--accent);
-    --dither-paper: var(--bg);
-    --dither-cell: 3px;
-    --dither-color-blue: oklch(0.72 0.14 262);
-    --dither-color-purple: oklch(0.7 0.18 304);
-    --dither-color-green: oklch(0.78 0.17 152);
-    --dither-color-pink: oklch(0.74 0.17 354);
-    --dither-color-orange: oklch(0.72 0.19 42);
-    --dither-color-red: oklch(0.68 0.2 25);
-    --dither-color-grey: oklch(0.66 0 0);
-    --dither-bloom: 1;
-  }
-  [data-theme="light"] {
-    --dither-color-blue: oklch(0.56 0.18 262);
-    --dither-color-purple: oklch(0.53 0.22 302);
-    --dither-color-green: oklch(0.58 0.15 152);
-    --dither-color-pink: oklch(0.58 0.21 355);
-    --dither-color-orange: oklch(0.64 0.2 42);
-    --dither-color-red: oklch(0.55 0.21 27);
-    --dither-color-grey: oklch(0.55 0 0);
-    --dither-bloom: 0.6;
-  }
-}
